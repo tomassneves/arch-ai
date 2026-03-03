@@ -7357,6 +7357,1867 @@
       "last_improved": "2026-03-03T06:26:54.665Z",
       "improvement_count": 1,
       "usage_count": 1
+    },
+    "dog": {
+      "composition": [
+        {
+          "type": "capsule",
+          "x": 0,
+          "y": 0.55,
+          "z": 0,
+          "color": "#c8a165",
+          "radius": 0.28,
+          "length": 0.9,
+          "axis": "z"
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 0.72,
+          "z": 0.52,
+          "color": "#c8a165",
+          "radius": 0.22
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 0.62,
+          "z": 0.72,
+          "color": "#a07840",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0.07,
+          "y": 0.78,
+          "z": 0.71,
+          "color": "black",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": -0.07,
+          "y": 0.78,
+          "z": 0.71,
+          "color": "black",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0.08,
+          "y": 0.795,
+          "z": 0.735,
+          "color": "white",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": -0.06,
+          "y": 0.795,
+          "z": 0.735,
+          "color": "white",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 0.6,
+          "z": 0.74,
+          "color": "#222222",
+          "radius": 0.1
+        },
+        {
+          "type": "capsule",
+          "x": 0.1,
+          "y": 0.9,
+          "z": 0.46,
+          "color": "#c8a165",
+          "radius": 0.06,
+          "length": 0.2,
+          "axis": "y"
+        },
+        {
+          "type": "capsule",
+          "x": -0.1,
+          "y": 0.9,
+          "z": 0.46,
+          "color": "#c8a165",
+          "radius": 0.06,
+          "length": 0.2,
+          "axis": "y"
+        },
+        {
+          "type": "capsule",
+          "x": 0.22,
+          "y": 0.18,
+          "z": 0.3,
+          "color": "#c8a165",
+          "radius": 0.07,
+          "length": 0.35,
+          "axis": "y"
+        },
+        {
+          "type": "capsule",
+          "x": -0.22,
+          "y": 0.18,
+          "z": 0.3,
+          "color": "#c8a165",
+          "radius": 0.07,
+          "length": 0.35,
+          "axis": "y"
+        },
+        {
+          "type": "capsule",
+          "x": 0.22,
+          "y": 0.18,
+          "z": -0.3,
+          "color": "#c8a165",
+          "radius": 0.07,
+          "length": 0.35,
+          "axis": "y"
+        },
+        {
+          "type": "capsule",
+          "x": -0.22,
+          "y": 0.18,
+          "z": -0.3,
+          "color": "#c8a165",
+          "radius": 0.07,
+          "length": 0.35,
+          "axis": "y"
+        },
+        {
+          "type": "sphere",
+          "x": 0.22,
+          "y": 0.04,
+          "z": 0.3,
+          "color": "#b08050",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": -0.22,
+          "y": 0.04,
+          "z": 0.3,
+          "color": "#b08050",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0.22,
+          "y": 0.04,
+          "z": -0.3,
+          "color": "#b08050",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": -0.22,
+          "y": 0.04,
+          "z": -0.3,
+          "color": "#b08050",
+          "radius": 0.1
+        },
+        {
+          "type": "capsule",
+          "x": 0,
+          "y": 0.62,
+          "z": -0.62,
+          "color": "#c8a165",
+          "radius": 0.06,
+          "length": 0.45,
+          "axis": "z"
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 0.58,
+          "z": -0.88,
+          "color": "#a07840",
+          "radius": 0.1
+        }
+      ],
+      "type": "dog",
+      "description": "Generated from: dog",
+      "keywords": [
+        "dog"
+      ],
+      "learned_at": "2026-03-03T09:38:43.710Z",
+      "last_improved": "2026-03-03T09:38:43.710Z",
+      "improvement_count": 1,
+      "usage_count": 1
+    },
+    "tiger": {
+      "composition": [
+        {
+          "type": "capsule",
+          "x": 0,
+          "y": 1.1,
+          "z": 0,
+          "color": "#e8820c",
+          "radius": 0.55,
+          "length": 2.2,
+          "axis": "z"
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 1.75,
+          "z": 1.2,
+          "color": "#e8820c",
+          "radius": 0.42
+        },
+        {
+          "type": "cone",
+          "x": -0.15,
+          "y": 2.1,
+          "z": 1.35,
+          "color": "#e8820c",
+          "radius": 0.18,
+          "height": 0.25
+        },
+        {
+          "type": "cone",
+          "x": 0.15,
+          "y": 2.1,
+          "z": 1.35,
+          "color": "#e8820c",
+          "radius": 0.18,
+          "height": 0.25
+        },
+        {
+          "type": "sphere",
+          "x": -0.14,
+          "y": 1.82,
+          "z": 1.52,
+          "color": "#1a1a1a",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0.14,
+          "y": 1.82,
+          "z": 1.52,
+          "color": "#1a1a1a",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": -0.14,
+          "y": 1.82,
+          "z": 1.56,
+          "color": "#111111",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0.14,
+          "y": 1.82,
+          "z": 1.56,
+          "color": "#111111",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 1.68,
+          "z": 1.58,
+          "color": "#cc3300",
+          "radius": 0.1
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 1.63,
+          "z": 1.59,
+          "color": "#ffccaa",
+          "width": 0.18,
+          "height": 0.1,
+          "depth": 0.1
+        },
+        {
+          "type": "capsule",
+          "x": -0.55,
+          "y": 0.85,
+          "z": 0.7,
+          "color": "#e8820c",
+          "radius": 0.08,
+          "length": 0.5,
+          "axis": "y"
+        },
+        {
+          "type": "capsule",
+          "x": 0.55,
+          "y": 0.85,
+          "z": 0.7,
+          "color": "#e8820c",
+          "radius": 0.08,
+          "length": 0.5,
+          "axis": "y"
+        },
+        {
+          "type": "capsule",
+          "x": -0.5,
+          "y": 0.85,
+          "z": -0.7,
+          "color": "#e8820c",
+          "radius": 0.08,
+          "length": 0.5,
+          "axis": "y"
+        },
+        {
+          "type": "capsule",
+          "x": 0.5,
+          "y": 0.85,
+          "z": -0.7,
+          "color": "#e8820c",
+          "radius": 0.08,
+          "length": 0.5,
+          "axis": "y"
+        },
+        {
+          "type": "sphere",
+          "x": -0.55,
+          "y": 0.12,
+          "z": 0.7,
+          "color": "#e8820c",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0.55,
+          "y": 0.12,
+          "z": 0.7,
+          "color": "#e8820c",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": -0.5,
+          "y": 0.12,
+          "z": -0.7,
+          "color": "#e8820c",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0.5,
+          "y": 0.12,
+          "z": -0.7,
+          "color": "#e8820c",
+          "radius": 0.1
+        },
+        {
+          "type": "capsule",
+          "x": 0,
+          "y": 1.05,
+          "z": -1.55,
+          "color": "#e8820c",
+          "radius": 0.07,
+          "length": 1.1,
+          "axis": "z"
+        },
+        {
+          "type": "box",
+          "x": -0.28,
+          "y": 1.2,
+          "z": 0.2,
+          "color": "#1a1a1a",
+          "width": 0.18,
+          "height": 0.1,
+          "depth": 0.35
+        },
+        {
+          "type": "box",
+          "x": 0.28,
+          "y": 1.2,
+          "z": 0.2,
+          "color": "#1a1a1a",
+          "width": 0.18,
+          "height": 0.1,
+          "depth": 0.35
+        },
+        {
+          "type": "box",
+          "x": -0.28,
+          "y": 1.2,
+          "z": -0.4,
+          "color": "#1a1a1a",
+          "width": 0.18,
+          "height": 0.1,
+          "depth": 0.35
+        },
+        {
+          "type": "box",
+          "x": 0.28,
+          "y": 1.2,
+          "z": -0.4,
+          "color": "#1a1a1a",
+          "width": 0.18,
+          "height": 0.1,
+          "depth": 0.35
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 1.2,
+          "z": -0.9,
+          "color": "#1a1a1a",
+          "width": 0.12,
+          "height": 0.1,
+          "depth": 0.3
+        },
+        {
+          "type": "box",
+          "x": -0.1,
+          "y": 1.75,
+          "z": 1.1,
+          "color": "#1a1a1a",
+          "width": 0.12,
+          "height": 0.1,
+          "depth": 0.25
+        },
+        {
+          "type": "box",
+          "x": 0.1,
+          "y": 1.75,
+          "z": 1.1,
+          "color": "#1a1a1a",
+          "width": 0.12,
+          "height": 0.1,
+          "depth": 0.25
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 1.68,
+          "z": 1.38,
+          "color": "#f5deb3",
+          "radius": 0.28
+        },
+        {
+          "type": "cone",
+          "x": -0.13,
+          "y": 2.08,
+          "z": 1.37,
+          "color": "#f5deb3",
+          "radius": 0.12,
+          "height": 0.18
+        },
+        {
+          "type": "cone",
+          "x": 0.13,
+          "y": 2.08,
+          "z": 1.37,
+          "color": "#f5deb3",
+          "radius": 0.12,
+          "height": 0.18
+        }
+      ],
+      "type": "tiger",
+      "description": "Generated from: tiger",
+      "keywords": [
+        "tiger"
+      ],
+      "learned_at": "2026-03-03T09:42:36.000Z",
+      "last_improved": "2026-03-03T09:42:36.000Z",
+      "improvement_count": 1,
+      "usage_count": 1
+    },
+    "ferrari_sf90_with_curved_aerodynamic_body": {
+      "composition": [
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.28,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 4.6,
+          "height": 0.25,
+          "depth": 2
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.65,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 4.2,
+          "height": 0.55,
+          "depth": 1.95
+        },
+        {
+          "type": "box",
+          "x": -0.3,
+          "y": 1.12,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 2.8,
+          "height": 0.55,
+          "depth": 1.85
+        },
+        {
+          "type": "capsule",
+          "x": -0.3,
+          "y": 1.22,
+          "z": 0,
+          "color": "#cc0000",
+          "radius": 0.38,
+          "length": 2.6,
+          "axis": "x"
+        },
+        {
+          "type": "box",
+          "x": -0.3,
+          "y": 1.28,
+          "z": 0,
+          "color": "#222222",
+          "width": 1.1,
+          "height": 0.45,
+          "depth": 1.75
+        },
+        {
+          "type": "box",
+          "x": 0.1,
+          "y": 1.3,
+          "z": 0,
+          "color": "#aaddff",
+          "width": 0.85,
+          "height": 0.38,
+          "depth": 1.6
+        },
+        {
+          "type": "box",
+          "x": -0.72,
+          "y": 1.28,
+          "z": 0,
+          "color": "#aaddff",
+          "width": 0.55,
+          "height": 0.32,
+          "depth": 1.55
+        },
+        {
+          "type": "box",
+          "x": -1.12,
+          "y": 1.18,
+          "z": 0,
+          "color": "#aaddff",
+          "width": 0.3,
+          "height": 0.28,
+          "depth": 1.5
+        },
+        {
+          "type": "torus",
+          "x": 1.42,
+          "y": 0.34,
+          "z": 0.82,
+          "color": "#111111",
+          "outerRadius": 0.34,
+          "tubeRadius": 0.13,
+          "axis": "x"
+        },
+        {
+          "type": "torus",
+          "x": 1.42,
+          "y": 0.34,
+          "z": -0.82,
+          "color": "#111111",
+          "outerRadius": 0.34,
+          "tubeRadius": 0.13,
+          "axis": "x"
+        },
+        {
+          "type": "torus",
+          "x": -1.38,
+          "y": 0.34,
+          "z": 0.82,
+          "color": "#111111",
+          "outerRadius": 0.34,
+          "tubeRadius": 0.13,
+          "axis": "x"
+        },
+        {
+          "type": "torus",
+          "x": -1.38,
+          "y": 0.34,
+          "z": -0.82,
+          "color": "#111111",
+          "outerRadius": 0.34,
+          "tubeRadius": 0.13,
+          "axis": "x"
+        },
+        {
+          "type": "cylinder",
+          "x": 1.42,
+          "y": 0.34,
+          "z": 0.82,
+          "color": "#888888",
+          "diameter": 0.42,
+          "height": 0.22
+        },
+        {
+          "type": "cylinder",
+          "x": 1.42,
+          "y": 0.34,
+          "z": -0.82,
+          "color": "#888888",
+          "diameter": 0.42,
+          "height": 0.22
+        },
+        {
+          "type": "cylinder",
+          "x": -1.38,
+          "y": 0.34,
+          "z": 0.82,
+          "color": "#888888",
+          "diameter": 0.42,
+          "height": 0.22
+        },
+        {
+          "type": "cylinder",
+          "x": -1.38,
+          "y": 0.34,
+          "z": -0.82,
+          "color": "#888888",
+          "diameter": 0.42,
+          "height": 0.22
+        },
+        {
+          "type": "box",
+          "x": 2.22,
+          "y": 0.52,
+          "z": 0.72,
+          "color": "#ffee00",
+          "width": 0.55,
+          "height": 0.12,
+          "depth": 0.38
+        },
+        {
+          "type": "box",
+          "x": 2.22,
+          "y": 0.52,
+          "z": -0.72,
+          "color": "#ffee00",
+          "width": 0.55,
+          "height": 0.12,
+          "depth": 0.38
+        },
+        {
+          "type": "sphere",
+          "x": 2.28,
+          "y": 0.58,
+          "z": 0.72,
+          "color": "#ffffff",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 2.28,
+          "y": 0.58,
+          "z": -0.72,
+          "color": "#ffffff",
+          "radius": 0.1
+        },
+        {
+          "type": "box",
+          "x": -2.28,
+          "y": 0.62,
+          "z": 0.72,
+          "color": "#ff2200",
+          "width": 0.18,
+          "height": 0.1,
+          "depth": 0.32
+        },
+        {
+          "type": "box",
+          "x": -2.28,
+          "y": 0.62,
+          "z": -0.72,
+          "color": "#ff2200",
+          "width": 0.18,
+          "height": 0.1,
+          "depth": 0.32
+        },
+        {
+          "type": "box",
+          "x": -2.25,
+          "y": 0.68,
+          "z": 0,
+          "color": "#ff2200",
+          "width": 0.12,
+          "height": 0.1,
+          "depth": 1.6
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.14,
+          "z": 0,
+          "color": "#111111",
+          "width": 1.85,
+          "height": 0.1,
+          "depth": 1.92
+        },
+        {
+          "type": "box",
+          "x": 2.05,
+          "y": 0.42,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.65,
+          "height": 0.22,
+          "depth": 1.88
+        },
+        {
+          "type": "box",
+          "x": -2.05,
+          "y": 0.42,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.65,
+          "height": 0.22,
+          "depth": 1.88
+        },
+        {
+          "type": "box",
+          "x": 0.85,
+          "y": 0.88,
+          "z": 0.98,
+          "color": "#cc0000",
+          "width": 0.18,
+          "height": 0.55,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": 0.85,
+          "y": 0.88,
+          "z": -0.98,
+          "color": "#cc0000",
+          "width": 0.18,
+          "height": 0.55,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": -0.55,
+          "y": 0.88,
+          "z": 0.98,
+          "color": "#cc0000",
+          "width": 0.18,
+          "height": 0.55,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": -0.55,
+          "y": 0.88,
+          "z": -0.98,
+          "color": "#cc0000",
+          "width": 0.18,
+          "height": 0.55,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": 1.95,
+          "y": 0.72,
+          "z": 0.88,
+          "color": "#cc0000",
+          "width": 0.45,
+          "height": 0.1,
+          "depth": 0.55
+        },
+        {
+          "type": "box",
+          "x": 1.95,
+          "y": 0.72,
+          "z": -0.88,
+          "color": "#cc0000",
+          "width": 0.45,
+          "height": 0.1,
+          "depth": 0.55
+        },
+        {
+          "type": "box",
+          "x": -1.85,
+          "y": 0.82,
+          "z": 0,
+          "color": "#aa0000",
+          "width": 1.2,
+          "height": 0.18,
+          "depth": 1.95
+        },
+        {
+          "type": "box",
+          "x": -2.3,
+          "y": 0.95,
+          "z": 0,
+          "color": "#880000",
+          "width": 0.1,
+          "height": 0.35,
+          "depth": 1.9
+        },
+        {
+          "type": "box",
+          "x": 2.1,
+          "y": 0.38,
+          "z": 0.55,
+          "color": "#333333",
+          "width": 0.35,
+          "height": 0.1,
+          "depth": 0.12
+        },
+        {
+          "type": "box",
+          "x": 2.1,
+          "y": 0.38,
+          "z": -0.55,
+          "color": "#333333",
+          "width": 0.35,
+          "height": 0.1,
+          "depth": 0.12
+        },
+        {
+          "type": "box",
+          "x": 0.6,
+          "y": 0.92,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.22,
+          "height": 0.1,
+          "depth": 1.85
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 1.05,
+          "z": 0.96,
+          "color": "#ffcc00",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 1.05,
+          "z": -0.96,
+          "color": "#ffcc00",
+          "radius": 0.1
+        }
+      ],
+      "type": "Ferrari SF90",
+      "description": "Generated from: ferrari_sf90_with_curved_aerodynamic_body",
+      "keywords": [
+        "ferrari_sf90_with_curved_aerodynamic_body"
+      ],
+      "learned_at": "2026-03-03T10:01:11.348Z",
+      "last_improved": "2026-03-03T10:01:11.349Z",
+      "improvement_count": 1,
+      "usage_count": 1
+    },
+    "greek_temple_with_columns_dome_and_curved_arches": {
+      "composition": [
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.3,
+          "z": 0,
+          "color": "#e8dcc8",
+          "width": 14,
+          "height": 0.6,
+          "depth": 8
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.9,
+          "z": 0,
+          "color": "#ddd0b8",
+          "width": 13,
+          "height": 0.4,
+          "depth": 7
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 1.3,
+          "z": 0,
+          "color": "#d4c8a8",
+          "width": 12,
+          "height": 0.4,
+          "depth": 6
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 6.2,
+          "z": 0,
+          "color": "#ddd0b8",
+          "width": 12,
+          "height": 0.5,
+          "depth": 6.5
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 6.7,
+          "z": 0,
+          "color": "#d4c8a8",
+          "width": 11,
+          "height": 0.3,
+          "depth": 5.5
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 3.7,
+          "z": 0,
+          "color": "#e4d8c0",
+          "width": 7,
+          "height": 4,
+          "depth": 4
+        },
+        {
+          "type": "cylinder",
+          "x": 0,
+          "y": 10.5,
+          "z": 0,
+          "color": "#d4c8a8",
+          "diameter": 0.4,
+          "height": 0.6
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 11.1,
+          "z": 0,
+          "color": "#c8b890",
+          "radius": 0.25
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 3.5,
+          "z": -1.9,
+          "color": "#e4d8c0",
+          "width": 5.5,
+          "height": 3.5,
+          "depth": 0.25
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 3.5,
+          "z": 1.9,
+          "color": "#e4d8c0",
+          "width": 5.5,
+          "height": 3.5,
+          "depth": 0.25
+        },
+        {
+          "type": "wall",
+          "x": -3.4,
+          "y": 3.5,
+          "z": 0,
+          "color": "#e4d8c0",
+          "width": 3.5,
+          "height": 3.5,
+          "depth": 0.25,
+          "rotation": 90
+        },
+        {
+          "type": "wall",
+          "x": 3.4,
+          "y": 3.5,
+          "z": 0,
+          "color": "#e4d8c0",
+          "width": 3.5,
+          "height": 3.5,
+          "depth": 0.25,
+          "rotation": 90
+        },
+        {
+          "type": "torus",
+          "x": 0,
+          "y": 10.8,
+          "z": 0,
+          "color": "#c8b890",
+          "outerRadius": 0.5,
+          "tubeRadius": 0.08,
+          "axis": "y"
+        }
+      ],
+      "type": "greek_temple",
+      "description": "Generated from: greek_temple_with_columns_dome_and_curved_arches",
+      "keywords": [
+        "greek_temple_with_columns_dome_and_curved_arches"
+      ],
+      "learned_at": "2026-03-03T10:02:43.035Z",
+      "last_improved": "2026-03-03T10:02:43.035Z",
+      "improvement_count": 1,
+      "usage_count": 1
+    },
+    "ornate_greek_temple_with_domes_and_decorative_columns_and_arches": {
+      "composition": [
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.3,
+          "z": 0,
+          "color": "#e8dcc8",
+          "width": 18,
+          "height": 0.6,
+          "depth": 10
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.85,
+          "z": 0,
+          "color": "#ede3cc",
+          "width": 16,
+          "height": 0.5,
+          "depth": 8
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 1.35,
+          "z": 0,
+          "color": "#f2e8d5",
+          "width": 14,
+          "height": 0.5,
+          "depth": 6
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 6.35,
+          "z": 0,
+          "color": "#ddd0b0",
+          "width": 13,
+          "height": 0.5,
+          "depth": 8
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 6.6,
+          "z": 0,
+          "color": "#d4c4a0",
+          "width": 12,
+          "height": 0.2,
+          "depth": 7
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 9.8,
+          "z": 0,
+          "color": "#c8a060",
+          "radius": 0.3
+        },
+        {
+          "type": "sphere",
+          "x": -4.5,
+          "y": 8.1,
+          "z": 0,
+          "color": "#c8a060",
+          "radius": 0.2
+        },
+        {
+          "type": "sphere",
+          "x": 4.5,
+          "y": 8.1,
+          "z": 0,
+          "color": "#c8a060",
+          "radius": 0.2
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 3.85,
+          "z": 0,
+          "color": "#ede3cc",
+          "width": 6,
+          "height": 4.5,
+          "depth": 0.3
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 3.85,
+          "z": 0,
+          "color": "#ede3cc",
+          "width": 7,
+          "height": 4.5,
+          "depth": 0.3,
+          "rotation": 90
+        },
+        {
+          "type": "cylinder",
+          "x": 0,
+          "y": 6.6,
+          "z": 0,
+          "color": "#c8a060",
+          "diameter": 0.25,
+          "height": 0.4
+        },
+        {
+          "type": "cylinder",
+          "x": -4.5,
+          "y": 6.6,
+          "z": 0,
+          "color": "#c8a060",
+          "diameter": 0.15,
+          "height": 0.3
+        },
+        {
+          "type": "cylinder",
+          "x": 4.5,
+          "y": 6.6,
+          "z": 0,
+          "color": "#c8a060",
+          "diameter": 0.15,
+          "height": 0.3
+        }
+      ],
+      "type": "greek_temple",
+      "description": "Generated from: ornate_greek_temple_with_domes_and_decorative_columns_and_arches",
+      "keywords": [
+        "ornate_greek_temple_with_domes_and_decorative_columns_and_arches"
+      ],
+      "learned_at": "2026-03-03T10:03:14.232Z",
+      "last_improved": "2026-03-03T10:03:14.232Z",
+      "improvement_count": 1,
+      "usage_count": 1
+    },
+    "beautiful_classic_house_with_pitched_roof_stairs_and_columns": {
+      "composition": [
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.2,
+          "z": 0,
+          "color": "#c8b89a",
+          "width": 10,
+          "height": 0.4,
+          "depth": 8
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 2.4,
+          "z": -4,
+          "color": "#f5f0e8",
+          "width": 10,
+          "height": 4,
+          "depth": 0.3
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 2.4,
+          "z": 4,
+          "color": "#f5f0e8",
+          "width": 10,
+          "height": 4,
+          "depth": 0.3
+        },
+        {
+          "type": "wall",
+          "x": -5,
+          "y": 2.4,
+          "z": 0,
+          "color": "#ede8dc",
+          "width": 8,
+          "height": 4,
+          "depth": 0.3,
+          "rotation": 90
+        },
+        {
+          "type": "wall",
+          "x": 5,
+          "y": 2.4,
+          "z": 0,
+          "color": "#ede8dc",
+          "width": 8,
+          "height": 4,
+          "depth": 0.3,
+          "rotation": 90
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 4.25,
+          "z": 0,
+          "color": "#d4c9b0",
+          "width": 10.4,
+          "height": 0.25,
+          "depth": 8.4
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.58,
+          "z": 5.75,
+          "color": "#c8b89a",
+          "width": 6,
+          "height": 0.35,
+          "depth": 3.5
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 4.68,
+          "z": 5,
+          "color": "#d4c9b0",
+          "width": 6,
+          "height": 0.25,
+          "depth": 2
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 2.7,
+          "z": 4.05,
+          "color": "#8ab4d4",
+          "width": 1.2,
+          "height": 2.6,
+          "depth": 0.2
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 4.08,
+          "z": 4.05,
+          "color": "#d4c9b0",
+          "width": 1.4,
+          "height": 0.15,
+          "depth": 0.25
+        },
+        {
+          "type": "box",
+          "x": -0.6,
+          "y": 2.7,
+          "z": 4.05,
+          "color": "#d4c9b0",
+          "width": 0.15,
+          "height": 2.6,
+          "depth": 0.25
+        },
+        {
+          "type": "box",
+          "x": 0.6,
+          "y": 2.7,
+          "z": 4.05,
+          "color": "#d4c9b0",
+          "width": 0.15,
+          "height": 2.6,
+          "depth": 0.25
+        },
+        {
+          "type": "wall",
+          "x": -3,
+          "y": 2.8,
+          "z": -4.05,
+          "color": "#8ab4d4",
+          "width": 1.8,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": 3,
+          "y": 2.8,
+          "z": -4.05,
+          "color": "#8ab4d4",
+          "width": 1.8,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        {
+          "type": "box",
+          "x": -3,
+          "y": 3.46,
+          "z": -4.05,
+          "color": "#d4c9b0",
+          "width": 2,
+          "height": 0.12,
+          "depth": 0.25
+        },
+        {
+          "type": "box",
+          "x": 3,
+          "y": 3.46,
+          "z": -4.05,
+          "color": "#d4c9b0",
+          "width": 2,
+          "height": 0.12,
+          "depth": 0.25
+        },
+        {
+          "type": "wall",
+          "x": -3,
+          "y": 2.8,
+          "z": 4.05,
+          "color": "#8ab4d4",
+          "width": 1.8,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": 3,
+          "y": 2.8,
+          "z": 4.05,
+          "color": "#8ab4d4",
+          "width": 1.8,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        {
+          "type": "box",
+          "x": -5.15,
+          "y": 2.4,
+          "z": -4.15,
+          "color": "#c8b89a",
+          "width": 0.3,
+          "height": 4,
+          "depth": 0.3
+        },
+        {
+          "type": "box",
+          "x": 5.15,
+          "y": 2.4,
+          "z": -4.15,
+          "color": "#c8b89a",
+          "width": 0.3,
+          "height": 4,
+          "depth": 0.3
+        },
+        {
+          "type": "box",
+          "x": -5.15,
+          "y": 2.4,
+          "z": 4.15,
+          "color": "#c8b89a",
+          "width": 0.3,
+          "height": 4,
+          "depth": 0.3
+        },
+        {
+          "type": "box",
+          "x": 5.15,
+          "y": 2.4,
+          "z": 4.15,
+          "color": "#c8b89a",
+          "width": 0.3,
+          "height": 4,
+          "depth": 0.3
+        },
+        {
+          "type": "cylinder",
+          "x": -3.5,
+          "y": 4.65,
+          "z": -3.5,
+          "color": "#8b3a2a",
+          "diameter": 0.6,
+          "height": 0.5
+        },
+        {
+          "type": "cylinder",
+          "x": 3.5,
+          "y": 4.65,
+          "z": -3.5,
+          "color": "#8b3a2a",
+          "diameter": 0.6,
+          "height": 0.5
+        },
+        {
+          "type": "cylinder",
+          "x": -3.5,
+          "y": 4.65,
+          "z": 3.5,
+          "color": "#8b3a2a",
+          "diameter": 0.6,
+          "height": 0.5
+        },
+        {
+          "type": "cylinder",
+          "x": 3.5,
+          "y": 4.65,
+          "z": 3.5,
+          "color": "#8b3a2a",
+          "diameter": 0.6,
+          "height": 0.5
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 7.15,
+          "z": 0,
+          "color": "#8b3a2a",
+          "width": 0.8,
+          "height": 0.8,
+          "depth": 0.8
+        },
+        {
+          "type": "cone",
+          "x": 0,
+          "y": 7.75,
+          "z": 0,
+          "color": "#7a2e1e",
+          "radius": 0.5,
+          "height": 0.8
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 8.38,
+          "z": 0,
+          "color": "#d4a017",
+          "radius": 0.18
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 4.5,
+          "z": -4.15,
+          "color": "#d4c9b0",
+          "width": 10.6,
+          "height": 0.18,
+          "depth": 0.18
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 4.5,
+          "z": 4.15,
+          "color": "#d4c9b0",
+          "width": 10.6,
+          "height": 0.18,
+          "depth": 0.18
+        },
+        {
+          "type": "box",
+          "x": -5.3,
+          "y": 4.5,
+          "z": 0,
+          "color": "#d4c9b0",
+          "width": 0.18,
+          "height": 0.18,
+          "depth": 8.6
+        },
+        {
+          "type": "box",
+          "x": 5.3,
+          "y": 4.5,
+          "z": 0,
+          "color": "#d4c9b0",
+          "width": 0.18,
+          "height": 0.18,
+          "depth": 8.6
+        }
+      ],
+      "type": "classic_house",
+      "description": "Generated from: beautiful_classic_house_with_pitched_roof_stairs_and_columns",
+      "keywords": [
+        "beautiful_classic_house_with_pitched_roof_stairs_and_columns"
+      ],
+      "learned_at": "2026-03-03T10:03:44.797Z",
+      "last_improved": "2026-03-03T10:03:44.797Z",
+      "improvement_count": 1,
+      "usage_count": 1
+    },
+    "ferari_sf_90": {
+      "composition": [
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.25,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 4.7,
+          "height": 0.3,
+          "depth": 2
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.65,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 4.2,
+          "height": 0.5,
+          "depth": 1.9
+        },
+        {
+          "type": "box",
+          "x": -0.2,
+          "y": 1.1,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 2.8,
+          "height": 0.55,
+          "depth": 1.85
+        },
+        {
+          "type": "box",
+          "x": 0.3,
+          "y": 1.55,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 1.6,
+          "height": 0.45,
+          "depth": 1.75
+        },
+        {
+          "type": "box",
+          "x": -0.1,
+          "y": 1.38,
+          "z": 0,
+          "color": "#111111",
+          "width": 2.4,
+          "height": 0.1,
+          "depth": 1.85
+        },
+        {
+          "type": "box",
+          "x": 0.25,
+          "y": 1.58,
+          "z": 0,
+          "color": "#aaddff",
+          "width": 1.5,
+          "height": 0.35,
+          "depth": 1.7
+        },
+        {
+          "type": "box",
+          "x": -0.85,
+          "y": 1.25,
+          "z": 0,
+          "color": "#aaddff",
+          "width": 0.6,
+          "height": 0.3,
+          "depth": 1.7
+        },
+        {
+          "type": "box",
+          "x": 1.1,
+          "y": 1.25,
+          "z": 0,
+          "color": "#aaddff",
+          "width": 0.5,
+          "height": 0.3,
+          "depth": 1.7
+        },
+        {
+          "type": "torus",
+          "x": -1.55,
+          "y": 0.33,
+          "z": 0.95,
+          "color": "#111111",
+          "outerRadius": 0.33,
+          "tubeRadius": 0.08,
+          "axis": "x"
+        },
+        {
+          "type": "torus",
+          "x": -1.55,
+          "y": 0.33,
+          "z": -0.95,
+          "color": "#111111",
+          "outerRadius": 0.33,
+          "tubeRadius": 0.08,
+          "axis": "x"
+        },
+        {
+          "type": "torus",
+          "x": 1.45,
+          "y": 0.33,
+          "z": 0.95,
+          "color": "#111111",
+          "outerRadius": 0.33,
+          "tubeRadius": 0.08,
+          "axis": "x"
+        },
+        {
+          "type": "torus",
+          "x": 1.45,
+          "y": 0.33,
+          "z": -0.95,
+          "color": "#111111",
+          "outerRadius": 0.33,
+          "tubeRadius": 0.08,
+          "axis": "x"
+        },
+        {
+          "type": "cylinder",
+          "x": -1.55,
+          "y": 0.33,
+          "z": 0.95,
+          "color": "#888888",
+          "diameter": 0.42,
+          "height": 0.22
+        },
+        {
+          "type": "cylinder",
+          "x": -1.55,
+          "y": 0.33,
+          "z": -0.95,
+          "color": "#888888",
+          "diameter": 0.42,
+          "height": 0.22
+        },
+        {
+          "type": "cylinder",
+          "x": 1.45,
+          "y": 0.33,
+          "z": 0.95,
+          "color": "#888888",
+          "diameter": 0.42,
+          "height": 0.22
+        },
+        {
+          "type": "cylinder",
+          "x": 1.45,
+          "y": 0.33,
+          "z": -0.95,
+          "color": "#888888",
+          "diameter": 0.42,
+          "height": 0.22
+        },
+        {
+          "type": "box",
+          "x": -2.1,
+          "y": 0.55,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.5,
+          "height": 0.12,
+          "depth": 2.05
+        },
+        {
+          "type": "box",
+          "x": 2,
+          "y": 0.55,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.5,
+          "height": 0.12,
+          "depth": 2.05
+        },
+        {
+          "type": "box",
+          "x": -2.25,
+          "y": 0.42,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.35,
+          "height": 0.1,
+          "depth": 2
+        },
+        {
+          "type": "box",
+          "x": 2.15,
+          "y": 0.42,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.35,
+          "height": 0.1,
+          "depth": 2
+        },
+        {
+          "type": "box",
+          "x": -2.25,
+          "y": 0.3,
+          "z": 0,
+          "color": "#222222",
+          "width": 0.9,
+          "height": 0.18,
+          "depth": 1.95
+        },
+        {
+          "type": "box",
+          "x": 2.15,
+          "y": 0.3,
+          "z": 0,
+          "color": "#222222",
+          "width": 0.7,
+          "height": 0.18,
+          "depth": 1.95
+        },
+        {
+          "type": "sphere",
+          "x": -2.3,
+          "y": 0.55,
+          "z": 0.75,
+          "color": "#ffff88",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": -2.3,
+          "y": 0.55,
+          "z": -0.75,
+          "color": "#ffff88",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 2.3,
+          "y": 0.55,
+          "z": 0.75,
+          "color": "#ff4400",
+          "radius": 0.1
+        },
+        {
+          "type": "sphere",
+          "x": 2.3,
+          "y": 0.55,
+          "z": -0.75,
+          "color": "#ff4400",
+          "radius": 0.1
+        },
+        {
+          "type": "box",
+          "x": -0.55,
+          "y": 1.2,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.1,
+          "height": 0.55,
+          "depth": 1.85
+        },
+        {
+          "type": "box",
+          "x": -0.55,
+          "y": 0.92,
+          "z": 0,
+          "color": "#111111",
+          "width": 0.6,
+          "height": 0.1,
+          "depth": 1.85
+        },
+        {
+          "type": "box",
+          "x": 0.5,
+          "y": 1.82,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 1.2,
+          "height": 0.1,
+          "depth": 2.1
+        },
+        {
+          "type": "box",
+          "x": 0.5,
+          "y": 1.65,
+          "z": 1.05,
+          "color": "#cc0000",
+          "width": 0.15,
+          "height": 0.35,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": 0.5,
+          "y": 1.65,
+          "z": -1.05,
+          "color": "#cc0000",
+          "width": 0.15,
+          "height": 0.35,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": 2.1,
+          "y": 0.75,
+          "z": 0.85,
+          "color": "#cc0000",
+          "width": 0.4,
+          "height": 0.1,
+          "depth": 0.5
+        },
+        {
+          "type": "box",
+          "x": 2.1,
+          "y": 0.75,
+          "z": -0.85,
+          "color": "#cc0000",
+          "width": 0.4,
+          "height": 0.1,
+          "depth": 0.5
+        },
+        {
+          "type": "cylinder",
+          "x": 2,
+          "y": 0.55,
+          "z": 0.55,
+          "color": "#444444",
+          "diameter": 0.12,
+          "height": 0.35
+        },
+        {
+          "type": "cylinder",
+          "x": 2,
+          "y": 0.55,
+          "z": -0.55,
+          "color": "#444444",
+          "diameter": 0.12,
+          "height": 0.35
+        },
+        {
+          "type": "box",
+          "x": -2.3,
+          "y": 0.72,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.25,
+          "height": 0.1,
+          "depth": 1.8
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.1,
+          "z": 0,
+          "color": "#111111",
+          "width": 0.6,
+          "height": 0.1,
+          "depth": 2
+        },
+        {
+          "type": "box",
+          "x": -0.3,
+          "y": 0.92,
+          "z": 0,
+          "color": "#ffff00",
+          "width": 0.3,
+          "height": 0.1,
+          "depth": 0.3
+        },
+        {
+          "type": "box",
+          "x": -1.8,
+          "y": 0.85,
+          "z": 0,
+          "color": "#cc0000",
+          "width": 0.5,
+          "height": 0.1,
+          "depth": 1.6
+        }
+      ],
+      "type": "ferrari_sf90",
+      "description": "Generated from: ferari_sf_90",
+      "keywords": [
+        "ferari_sf_90"
+      ],
+      "learned_at": "2026-03-03T10:08:32.033Z",
+      "last_improved": "2026-03-03T10:08:32.033Z",
+      "improvement_count": 1,
+      "usage_count": 1
     }
   },
   "interaction_log": [
@@ -17428,6 +19289,48 @@
       "timestamp": "2026-03-03T06:26:54.665Z",
       "action": "learned",
       "concept": "pathernon",
+      "improvement_count": 1
+    },
+    {
+      "timestamp": "2026-03-03T09:38:43.710Z",
+      "action": "learned",
+      "concept": "dog",
+      "improvement_count": 1
+    },
+    {
+      "timestamp": "2026-03-03T09:42:36.000Z",
+      "action": "learned",
+      "concept": "tiger",
+      "improvement_count": 1
+    },
+    {
+      "timestamp": "2026-03-03T10:01:11.349Z",
+      "action": "learned",
+      "concept": "ferrari_sf90_with_curved_aerodynamic_body",
+      "improvement_count": 1
+    },
+    {
+      "timestamp": "2026-03-03T10:02:43.036Z",
+      "action": "learned",
+      "concept": "greek_temple_with_columns_dome_and_curved_arches",
+      "improvement_count": 1
+    },
+    {
+      "timestamp": "2026-03-03T10:03:14.232Z",
+      "action": "learned",
+      "concept": "ornate_greek_temple_with_domes_and_decorative_columns_and_arches",
+      "improvement_count": 1
+    },
+    {
+      "timestamp": "2026-03-03T10:03:44.797Z",
+      "action": "learned",
+      "concept": "beautiful_classic_house_with_pitched_roof_stairs_and_columns",
+      "improvement_count": 1
+    },
+    {
+      "timestamp": "2026-03-03T10:08:32.033Z",
+      "action": "learned",
+      "concept": "ferari_sf_90",
       "improvement_count": 1
     }
   ]

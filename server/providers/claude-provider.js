@@ -171,7 +171,7 @@ AVAILABLE PRIMITIVES: ${availableTypes}
 14. COLUMN_WITH_CAPITAL (decorative columns) ⭐ ARCHITECTURAL!
    - diameter: column diameter (meters, typically 0.3 to 0.6)
    - height: column height (meters, typically 2 to 5)
-   - capitalStyle: 'doric' (simple), 'ionic' (curved), or 'corinthian' (ornate)
+   - capitalType: 'doric' (simple), 'ionic' (curved), or 'corinthian' (ornate)
 
 15. BEZIER_SURFACE (curved parametric surfaces) ⭐ PRECISION CURVES!
    - controlGrid: 2D array of [x,y,z] control points (e.g., 3x3 grid = 9 points)
@@ -234,10 +234,25 @@ Example: cylinder with height 2 at y=0, next at y=2, next at y=4
 - Windows: Thin WALL (color:"blue") on the sides
 - Headlights: Small SPHERE (radius:0.1, color:"yellow")
 
-HOUSE (example):
-- 4 walls for walls (use rotation: 90 for perpendicular walls)
-- Cone or triangle for roof
-- Small walls for windows/doors (or leave gaps)
+HOUSE (example with NEW architectural primitives):
+- 4 WALL parts for exterior (use rotation: 90 for perpendicular walls)
+- PITCHED_ROOF for triangular roof peak
+- STAIRS for entrance or internal levels
+- COLUMN_WITH_CAPITAL for porch or internal supports
+- DOOR/WINDOW details as small walls or openings
+
+TEMPLE (example with arches and domes):
+- Base: BOX or multiple WALLs
+- Arches: ARCH (radius:2, archType:'semicircle') placed evenly
+- Dome: DOME (radius:3) at the center top
+- Pillars: COLUMN_WITH_CAPITAL (diameter:0.5, height:4, capitalType:'corinthian')
+- Entry: ARCH (radius:3, archType:'pointed') for dramatic entrance
+
+STAIRCASE:
+- STAIRS (width:1.5, stepCount:12, stepHeight:0.18, stepDepth:0.28)
+- Use COLUMN_WITH_CAPITAL on sides as balusters
+- Add ARCH above for vault effect
+- Top with DOME for skylight
 
 ═══════════════════════════════════════════════════════════
 📋 OUTPUT FORMAT
@@ -268,6 +283,44 @@ Composite object (ALWAYS use for complex objects):
 }
 
 ═══════════════════════════════════════════════════════════
+🏛️ WHEN TO USE ARCHITECTURAL PRIMITIVES
+═══════════════════════════════════════════════════════════
+
+ARCH:
+  - Use for curved openings (doorways, windows, tunnels)
+  - Semicircle arch (90°) for classical openings
+  - Pointed arch (120°) for gothic/dramatic style
+  - Segmental arch (60°) for subtle curves
+  - Typically size 1.5-3 meters radius with 0.2-0.5 thickness
+
+PITCHED_ROOF:
+  - Use for traditional house/building roofs
+  - Creates natural peak/gable appearance
+  - Height 0.5-2 meters depending on building size
+  - Width/depth should match building walls
+
+DOME:
+  - Use for ornate buildings, temples, capitol buildings
+  - Creates curved hemispherical top
+  - Often used alone as a focal point (radius: 1-4 m)
+  - Can be centered on top of box for enclosed structure
+
+STAIRS:
+  - Use for multi-level buildings, terraces, entries
+  - 6 steps = ~1.8m height (stepHeight 0.3m each)
+  - 12 steps = ~3.6m height (typical for big staircases)
+  - Width 1.2-2m depending on building scale
+  - Include railings (automatically rendered)
+
+COLUMN_WITH_CAPITAL:
+  - Use for support pillars/columns in architecture
+  - Doric: simple, classical, military buildings
+  - Ionic: curved, temples, libraries
+  - Corinthian: ornate, palaces, grand buildings
+  - Typical height 2-5 meters, diameter 0.3-0.6 meters
+  - Space multiple columns evenly for colonnade effect
+
+═══════════════════════════════════════════════════════════
 ⚡ FINAL INSTRUCTIONS
 ═══════════════════════════════════════════════════════════
 
@@ -276,7 +329,9 @@ Composite object (ALWAYS use for complex objects):
 - Think about the real proportions of the object
 - Position each element with exact coordinates
 - For vehicles: always include wheels, car body, windows
-- For buildings: always include walls, ceiling, base
+- For architecture: PREFER architectural primitives (arch, roof, dome, stairs, columns) over basic shapes
+- For buildings: always include walls, ceiling/roof, base
+- For detailed structures: use architectural primitives as primary elements
 - Use rotation when necessary (perpendicular walls)
 
 IMPORTANT: Keep the JSON compact and valid. Avoid excessive complexity.
@@ -373,7 +428,7 @@ export async function refineWithClaude(objectName, currentComposition, userFeedb
 IMPORTANT: You will receive an existing 3D object and an improvement request.
 You MUST maintain the CHARACTER and ESSENCE of the original object while improving it.${qualityContext}
 
-AVAILABLE PRIMITIVES: wall, cylinder, cube, triangle, sphere, cone, torus, box, capsule
+AVAILABLE PRIMITIVES: wall, cylinder, cube, triangle, sphere, cone, torus, box, capsule, arch, pitched_roof, dome, stairs, column_with_capital
 
 AVAILABLE COLORS:
 Each part can have a "color" property with names like: red, green, blue, yellow, black, white, gray, orange, purple, pink

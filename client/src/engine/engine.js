@@ -1586,6 +1586,66 @@ export class Engine {
     return beam;
   }
 
+  addArch({ radius = 1.5, thickness = 0.2, archType = 'semicircle', x = 0, z = 0 } = {}) {
+    const arch = createArch({ radius, thickness, archType });
+    arch.position.set(x, 0, z);
+    arch.userData.selectable = true;
+    arch.userData.type = 'Arch';
+    arch.userData.params = { radius, thickness, archType };
+    this.scene.add(arch);
+    this._addSel(arch);
+    this._push({ type: "add", object: arch });
+    return arch;
+  }
+
+  addRoof({ width = 4, depth = 3, height = 1.5, x = 0, z = 0 } = {}) {
+    const roof = createPitchedRoof({ width, depth, height });
+    roof.position.set(x, 0, z);
+    roof.userData.selectable = true;
+    roof.userData.type = 'Roof';
+    roof.userData.params = { width, depth, height };
+    this.scene.add(roof);
+    this._addSel(roof);
+    this._push({ type: "add", object: roof });
+    return roof;
+  }
+
+  addStair({ width = 1.2, stepCount = 6, stepHeight = 0.3, stepDepth = 0.4, x = 0, z = 0 } = {}) {
+    const stair = createStairs({ width, stepCount, stepHeight, stepDepth });
+    stair.position.set(x, 0, z);
+    stair.userData.selectable = true;
+    stair.userData.type = 'Stair';
+    stair.userData.params = { width, stepCount, stepHeight, stepDepth };
+    this.scene.add(stair);
+    this._addSel(stair);
+    this._push({ type: "add", object: stair });
+    return stair;
+  }
+
+  addDome({ radius = 2, x = 0, z = 0 } = {}) {
+    const dome = createDome({ radius });
+    dome.position.set(x, 0, z);
+    dome.userData.selectable = true;
+    dome.userData.type = 'Dome';
+    dome.userData.params = { radius };
+    this.scene.add(dome);
+    this._addSel(dome);
+    this._push({ type: "add", object: dome });
+    return dome;
+  }
+
+  addColumnWithCapital({ diameter = 0.4, height = 3, capitalType = 'ionic', x = 0, z = 0 } = {}) {
+    const column = createColumnWithCapital({ diameter, height, capitalType });
+    column.position.set(x, 0, z);
+    column.userData.selectable = true;
+    column.userData.type = 'ColumnWithCapital';
+    column.userData.params = { diameter, height, capitalType };
+    this.scene.add(column);
+    this._addSel(column);
+    this._push({ type: "add", object: column });
+    return column;
+  }
+
   // Show 3D feedback UI attached to any selected object
   showFeedbackUI(object) {
     if (!object) return;
@@ -1629,7 +1689,7 @@ export class Engine {
             </div>
             <input type="text" 
                    class="feedback-3d-input" 
-                   placeholder="Improving ${objName}..." 
+                   placeholder="Edit/Improve ${objName}..." 
                    />
             <div class="feedback-3d-toolbar">
               <button class="feedback-btn feedback-btn-undo" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
@@ -2169,6 +2229,21 @@ export class Engine {
           break;
         case 'addComposite':
           this.addComposite(cmd.params);
+          break;
+        case 'addArch':
+          this.addArch(cmd.params);
+          break;
+        case 'addRoof':
+          this.addRoof(cmd.params);
+          break;
+        case 'addStair':
+          this.addStair(cmd.params);
+          break;
+        case 'addDome':
+          this.addDome(cmd.params);
+          break;
+        case 'addColumnWithCapital':
+          this.addColumnWithCapital(cmd.params);
           break;
         default:
           break;
