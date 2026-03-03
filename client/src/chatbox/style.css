@@ -1,0 +1,69 @@
+/* =========================
+   CHATBOX - Clean Build
+   ========================= */
+
+#chatbox-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    z-index: 900;
+    pointer-events: none;
+}
+
+#chatbox {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 48px;
+    background: #40414F;
+    border-radius: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    padding: 8px 16px;
+    pointer-events: all;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#chatbox input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 0 12px;
+    font-size: 15px;
+    background: transparent;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#chatbox input::placeholder {
+    color: #8e8e8e;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 50%;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.icon-btn:active {
+    background: rgba(255, 255, 255, 0.2);
+}
