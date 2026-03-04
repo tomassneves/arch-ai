@@ -1063,8 +1063,8 @@ export class Engine {
     if (k === "m") return this.setTool("translate");
     if (k === "r") return this.setTool("rotate");
     if (k === "s") return this.setTool("scale");
-    if (e.key === "Escape") {
-      // Exit group editing mode if active, otherwise switch to select tool
+    if (e.key === " ") {
+      // Space bar: switch to select tool or exit group edit mode
       if (this.groupEditMode) {
         return this.exitGroupEdit();
       }

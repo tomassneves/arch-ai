@@ -9218,6 +9218,921 @@
       "last_improved": "2026-03-03T10:08:32.033Z",
       "improvement_count": 1,
       "usage_count": 1
+    },
+    "villa_savoye": {
+      "composition": [
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.2,
+          "z": 0,
+          "color": "#f5f0e8",
+          "width": 21.5,
+          "height": 0.4,
+          "depth": 19.5
+        },
+        {
+          "type": "cylinder",
+          "x": -8,
+          "y": 2.15,
+          "z": -7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": -4,
+          "y": 2.15,
+          "z": -7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": 0,
+          "y": 2.15,
+          "z": -7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": 4,
+          "y": 2.15,
+          "z": -7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": 8,
+          "y": 2.15,
+          "z": -7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": -8,
+          "y": 2.15,
+          "z": 7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": -4,
+          "y": 2.15,
+          "z": 7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": 0,
+          "y": 2.15,
+          "z": 7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": 4,
+          "y": 2.15,
+          "z": 7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": 8,
+          "y": 2.15,
+          "z": 7,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": -8,
+          "y": 2.15,
+          "z": 0,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "cylinder",
+          "x": 8,
+          "y": 2.15,
+          "z": 0,
+          "color": "#f5f0e8",
+          "diameter": 0.4,
+          "height": 3.5
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 3.8,
+          "z": 0,
+          "color": "#f5f0e8",
+          "width": 21.5,
+          "height": 0.4,
+          "depth": 19.5
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 5.4,
+          "z": -9.75,
+          "color": "#f5f0e8",
+          "width": 21.5,
+          "height": 3.2,
+          "depth": 0.25
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 5.4,
+          "z": 9.75,
+          "color": "#f5f0e8",
+          "width": 21.5,
+          "height": 3.2,
+          "depth": 0.25
+        },
+        {
+          "type": "wall",
+          "x": -10.75,
+          "y": 5.4,
+          "z": 0,
+          "color": "#f5f0e8",
+          "width": 19.5,
+          "height": 3.2,
+          "depth": 0.25,
+          "rotation": 90
+        },
+        {
+          "type": "wall",
+          "x": 10.75,
+          "y": 5.4,
+          "z": 0,
+          "color": "#f5f0e8",
+          "width": 19.5,
+          "height": 3.2,
+          "depth": 0.25,
+          "rotation": 90
+        },
+        {
+          "type": "wall",
+          "x": -5,
+          "y": 5,
+          "z": -9.6,
+          "color": "#87ceeb",
+          "width": 8,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": 4,
+          "y": 5,
+          "z": -9.6,
+          "color": "#87ceeb",
+          "width": 8,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": 0,
+          "y": 5,
+          "z": 9.6,
+          "color": "#87ceeb",
+          "width": 10,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": -10.6,
+          "y": 5,
+          "z": 2,
+          "color": "#87ceeb",
+          "width": 6,
+          "height": 1.2,
+          "depth": 0.2,
+          "rotation": 90
+        },
+        {
+          "type": "wall",
+          "x": 10.6,
+          "y": 5,
+          "z": 2,
+          "color": "#87ceeb",
+          "width": 6,
+          "height": 1.2,
+          "depth": 0.2,
+          "rotation": 90
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 7.15,
+          "z": 0,
+          "color": "#e8e0d0",
+          "width": 21.5,
+          "height": 0.35,
+          "depth": 19.5
+        },
+        {
+          "type": "wall",
+          "x": -6,
+          "y": 8.6,
+          "z": -9.75,
+          "color": "#f5f0e8",
+          "width": 8,
+          "height": 2.5,
+          "depth": 0.25
+        },
+        {
+          "type": "wall",
+          "x": 7,
+          "y": 8.6,
+          "z": -9.75,
+          "color": "#f5f0e8",
+          "width": 5,
+          "height": 2.5,
+          "depth": 0.25
+        },
+        {
+          "type": "wall",
+          "x": -3,
+          "y": 8.6,
+          "z": 9.75,
+          "color": "#f5f0e8",
+          "width": 10,
+          "height": 2.5,
+          "depth": 0.25
+        },
+        {
+          "type": "wall",
+          "x": -10.75,
+          "y": 8.6,
+          "z": -2,
+          "color": "#f5f0e8",
+          "width": 8,
+          "height": 2.5,
+          "depth": 0.25,
+          "rotation": 90
+        },
+        {
+          "type": "wall",
+          "x": 10.75,
+          "y": 8.6,
+          "z": -2,
+          "color": "#f5f0e8",
+          "width": 8,
+          "height": 2.5,
+          "depth": 0.25,
+          "rotation": 90
+        },
+        {
+          "type": "wall",
+          "x": 2,
+          "y": 8.1,
+          "z": -9.6,
+          "color": "#87ceeb",
+          "width": 6,
+          "height": 1.5,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": -4,
+          "y": 8.1,
+          "z": 9.6,
+          "color": "#87ceeb",
+          "width": 4,
+          "height": 1.5,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": -10.6,
+          "y": 8.1,
+          "z": 3,
+          "color": "#87ceeb",
+          "width": 4,
+          "height": 1.5,
+          "depth": 0.2,
+          "rotation": 90
+        },
+        {
+          "type": "wall",
+          "x": 10.6,
+          "y": 8.1,
+          "z": 3,
+          "color": "#87ceeb",
+          "width": 4,
+          "height": 1.5,
+          "depth": 0.2,
+          "rotation": 90
+        },
+        {
+          "type": "box",
+          "x": 3,
+          "y": 10,
+          "z": 2,
+          "color": "#d4c9b0",
+          "width": 10,
+          "height": 0.3,
+          "depth": 8
+        },
+        {
+          "type": "wall",
+          "x": 3,
+          "y": 10.75,
+          "z": -2,
+          "color": "#f5f0e8",
+          "width": 10,
+          "height": 1.2,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": -2,
+          "y": 10.75,
+          "z": 2,
+          "color": "#f5f0e8",
+          "width": 8,
+          "height": 1.2,
+          "depth": 0.2,
+          "rotation": 90
+        },
+        {
+          "type": "wall",
+          "x": 8,
+          "y": 10.75,
+          "z": 2,
+          "color": "#f5f0e8",
+          "width": 8,
+          "height": 1.2,
+          "depth": 0.2,
+          "rotation": 90
+        },
+        {
+          "type": "cylinder",
+          "x": -3,
+          "y": 5.8,
+          "z": 2,
+          "color": "#f5f0e8",
+          "diameter": 1.2,
+          "height": 3.5
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 10.15,
+          "z": 0,
+          "color": "#e0d8c8",
+          "width": 21.5,
+          "height": 0.3,
+          "depth": 19.5
+        },
+        {
+          "type": "wall",
+          "x": -9,
+          "y": 10.8,
+          "z": -9.75,
+          "color": "#f5f0e8",
+          "width": 0.8,
+          "height": 1,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": -5,
+          "y": 10.8,
+          "z": -9.75,
+          "color": "#f5f0e8",
+          "width": 0.8,
+          "height": 1,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": 9,
+          "y": 10.8,
+          "z": 9.75,
+          "color": "#f5f0e8",
+          "width": 0.8,
+          "height": 1,
+          "depth": 0.2
+        },
+        {
+          "type": "wall",
+          "x": 5,
+          "y": 10.8,
+          "z": 9.75,
+          "color": "#f5f0e8",
+          "width": 0.8,
+          "height": 1,
+          "depth": 0.2
+        },
+        {
+          "type": "cylinder",
+          "x": 1,
+          "y": 11.8,
+          "z": 0,
+          "color": "#888888",
+          "diameter": 0.15,
+          "height": 2.5
+        },
+        {
+          "type": "cylinder",
+          "x": 1,
+          "y": 13.1,
+          "z": 0,
+          "color": "#888888",
+          "diameter": 0.8,
+          "height": 0.3
+        }
+      ],
+      "type": "villa_savoye",
+      "description": "Generated from: villa_savoye",
+      "keywords": [
+        "villa_savoye"
+      ],
+      "learned_at": "2026-03-04T14:15:57.805Z",
+      "last_improved": "2026-03-04T14:15:57.805Z",
+      "improvement_count": 1,
+      "usage_count": 1
+    },
+    "eifell_tower": {
+      "composition": [
+        {
+          "type": "box",
+          "x": 0,
+          "y": 0.15,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.8,
+          "height": 0.3,
+          "depth": 0.8
+        },
+        {
+          "type": "wall",
+          "x": -2.5,
+          "y": 2,
+          "z": -2.5,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 4,
+          "depth": 0.15
+        },
+        {
+          "type": "wall",
+          "x": 2.5,
+          "y": 2,
+          "z": -2.5,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 4,
+          "depth": 0.15
+        },
+        {
+          "type": "wall",
+          "x": -2.5,
+          "y": 2,
+          "z": 2.5,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 4,
+          "depth": 0.15
+        },
+        {
+          "type": "wall",
+          "x": 2.5,
+          "y": 2,
+          "z": 2.5,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 4,
+          "depth": 0.15
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 1.2,
+          "z": -2.5,
+          "color": "#8b7355",
+          "width": 6.5,
+          "height": 0.3,
+          "depth": 0.2
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 1.2,
+          "z": 2.5,
+          "color": "#8b7355",
+          "width": 6.5,
+          "height": 0.3,
+          "depth": 0.2
+        },
+        {
+          "type": "box",
+          "x": -2.5,
+          "y": 1.2,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 0.3,
+          "depth": 6.5
+        },
+        {
+          "type": "box",
+          "x": 2.5,
+          "y": 1.2,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 0.3,
+          "depth": 6.5
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 2.8,
+          "z": -2.5,
+          "color": "#8b7355",
+          "width": 6.5,
+          "height": 0.3,
+          "depth": 0.2
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 2.8,
+          "z": 2.5,
+          "color": "#8b7355",
+          "width": 6.5,
+          "height": 0.3,
+          "depth": 0.2
+        },
+        {
+          "type": "box",
+          "x": -2.5,
+          "y": 2.8,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 0.3,
+          "depth": 6.5
+        },
+        {
+          "type": "box",
+          "x": 2.5,
+          "y": 2.8,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 0.3,
+          "depth": 6.5
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 4.25,
+          "z": 0,
+          "color": "#7a6645",
+          "width": 6.2,
+          "height": 0.5,
+          "depth": 6.2
+        },
+        {
+          "type": "wall",
+          "x": -1.6,
+          "y": 6.25,
+          "z": -1.6,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 3.5,
+          "depth": 0.12
+        },
+        {
+          "type": "wall",
+          "x": 1.6,
+          "y": 6.25,
+          "z": -1.6,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 3.5,
+          "depth": 0.12
+        },
+        {
+          "type": "wall",
+          "x": -1.6,
+          "y": 6.25,
+          "z": 1.6,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 3.5,
+          "depth": 0.12
+        },
+        {
+          "type": "wall",
+          "x": 1.6,
+          "y": 6.25,
+          "z": 1.6,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 3.5,
+          "depth": 0.12
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 5.5,
+          "z": -1.6,
+          "color": "#8b7355",
+          "width": 3.8,
+          "height": 0.3,
+          "depth": 0.15
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 5.5,
+          "z": 1.6,
+          "color": "#8b7355",
+          "width": 3.8,
+          "height": 0.3,
+          "depth": 0.15
+        },
+        {
+          "type": "box",
+          "x": -1.6,
+          "y": 5.5,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.15,
+          "height": 0.3,
+          "depth": 3.8
+        },
+        {
+          "type": "box",
+          "x": 1.6,
+          "y": 5.5,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.15,
+          "height": 0.3,
+          "depth": 3.8
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 7.5,
+          "z": -1.6,
+          "color": "#8b7355",
+          "width": 3.8,
+          "height": 0.3,
+          "depth": 0.15
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 7.5,
+          "z": 1.6,
+          "color": "#8b7355",
+          "width": 3.8,
+          "height": 0.3,
+          "depth": 0.15
+        },
+        {
+          "type": "box",
+          "x": -1.6,
+          "y": 7.5,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.15,
+          "height": 0.3,
+          "depth": 3.8
+        },
+        {
+          "type": "box",
+          "x": 1.6,
+          "y": 7.5,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.15,
+          "height": 0.3,
+          "depth": 3.8
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 8,
+          "z": 0,
+          "color": "#7a6645",
+          "width": 3.6,
+          "height": 0.5,
+          "depth": 3.6
+        },
+        {
+          "type": "wall",
+          "x": -0.8,
+          "y": 10.25,
+          "z": -0.8,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 4,
+          "depth": 0.1
+        },
+        {
+          "type": "wall",
+          "x": 0.8,
+          "y": 10.25,
+          "z": -0.8,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 4,
+          "depth": 0.1
+        },
+        {
+          "type": "wall",
+          "x": -0.8,
+          "y": 10.25,
+          "z": 0.8,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 4,
+          "depth": 0.1
+        },
+        {
+          "type": "wall",
+          "x": 0.8,
+          "y": 10.25,
+          "z": 0.8,
+          "color": "#8b7355",
+          "width": 0.2,
+          "height": 4,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 9.5,
+          "z": -0.8,
+          "color": "#8b7355",
+          "width": 2,
+          "height": 0.3,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 9.5,
+          "z": 0.8,
+          "color": "#8b7355",
+          "width": 2,
+          "height": 0.3,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": -0.8,
+          "y": 9.5,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.1,
+          "height": 0.3,
+          "depth": 2
+        },
+        {
+          "type": "box",
+          "x": 0.8,
+          "y": 9.5,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.1,
+          "height": 0.3,
+          "depth": 2
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 11.5,
+          "z": -0.8,
+          "color": "#8b7355",
+          "width": 2,
+          "height": 0.3,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 11.5,
+          "z": 0.8,
+          "color": "#8b7355",
+          "width": 2,
+          "height": 0.3,
+          "depth": 0.1
+        },
+        {
+          "type": "box",
+          "x": -0.8,
+          "y": 11.5,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.1,
+          "height": 0.3,
+          "depth": 2
+        },
+        {
+          "type": "box",
+          "x": 0.8,
+          "y": 11.5,
+          "z": 0,
+          "color": "#8b7355",
+          "width": 0.1,
+          "height": 0.3,
+          "depth": 2
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "y": 12.5,
+          "z": 0,
+          "color": "#7a6645",
+          "width": 2,
+          "height": 0.5,
+          "depth": 2
+        },
+        {
+          "type": "cylinder",
+          "x": 0,
+          "y": 13.5,
+          "z": 0,
+          "color": "#8b7355",
+          "diameter": 1.2,
+          "height": 1.5
+        },
+        {
+          "type": "cylinder",
+          "x": 0,
+          "y": 15.25,
+          "z": 0,
+          "color": "#8b7355",
+          "diameter": 0.8,
+          "height": 2
+        },
+        {
+          "type": "cylinder",
+          "x": 0,
+          "y": 17.25,
+          "z": 0,
+          "color": "#8b7355",
+          "diameter": 0.5,
+          "height": 2
+        },
+        {
+          "type": "cone",
+          "x": 0,
+          "y": 19.25,
+          "z": 0,
+          "color": "#8b7355",
+          "radius": 0.25,
+          "height": 1.5
+        },
+        {
+          "type": "sphere",
+          "x": 0,
+          "y": 20.85,
+          "z": 0,
+          "color": "#ffd700",
+          "radius": 0.1
+        }
+      ],
+      "type": "eiffel_tower",
+      "description": "Generated from: eifell_tower",
+      "keywords": [
+        "eifell_tower"
+      ],
+      "learned_at": "2026-03-04T14:20:51.898Z",
+      "last_improved": "2026-03-04T14:20:51.898Z",
+      "improvement_count": 1,
+      "usage_count": 1
     }
   },
   "interaction_log": [
@@ -19331,6 +20246,18 @@
       "timestamp": "2026-03-03T10:08:32.033Z",
       "action": "learned",
       "concept": "ferari_sf_90",
+      "improvement_count": 1
+    },
+    {
+      "timestamp": "2026-03-04T14:15:57.805Z",
+      "action": "learned",
+      "concept": "villa_savoye",
+      "improvement_count": 1
+    },
+    {
+      "timestamp": "2026-03-04T14:20:51.898Z",
+      "action": "learned",
+      "concept": "eifell_tower",
       "improvement_count": 1
     }
   ]

@@ -1,46 +1,16 @@
 import { Engine } from '../engine/engine.js'
 
-export function bootstrap() {
-  const app = document.getElementById('app')
-  if (!app) throw new Error('Could not find #app')
-
-  const engine = new Engine(app)
-  window.__engine = engine
-
-  const btnSelect = document.getElementById('tool-select')
-  const btnMove = document.getElementById('tool-move')
-  const btnRotate = document.getElementById('tool-rotate')
-  const btnScale = document.getElementById('tool-scale')
-  const btnNew = document.getElementById('btn-new')
-
-  const toolButtons = {
-    select: btnSelect,
-    translate: btnMove,
-    rotate: btnRotate,
-    scale: btnScale,
+export function bootstrap(engine) {
+  // If no engine is provided, create one
+  if (!engine) {
+    const app = document.getElementById('app')
+    if (!app) throw new Error('Could not find #app')
+    engine = new Engine(app)
+    window.__engine = engine
   }
 
-  function setActiveButton(mode) {
-    Object.values(toolButtons).forEach((b) => b?.classList.remove('active'))
-    toolButtons[mode]?.classList.add('active')
-  }
-
-  engine.onToolChange = (mode) => setActiveButton(mode)
-
-  btnSelect?.addEventListener('click', () => engine.setTool('select'))
-  btnMove?.addEventListener('click', () => engine.setTool('translate'))
-  btnRotate?.addEventListener('click', () => engine.setTool('rotate'))
-  btnScale?.addEventListener('click', () => engine.setTool('scale'))
-
-  btnNew?.addEventListener('click', () => {
-    engine.addCube({
-      x: (Math.random() - 0.5) * 10,
-      z: (Math.random() - 0.5) * 10,
-    })
-    engine.setTool('translate')
-  })
-
-  // Menu bar functionality
+  
+  // File menu setup (toolbar buttons handled in main.js)
   const fileMenu = document.getElementById('file-menu')
   const fileDropdown = document.getElementById('file-dropdown')
   const menuSave = document.getElementById('menu-save')
@@ -48,10 +18,16 @@ export function bootstrap() {
   const menuExport = document.getElementById('menu-export')
   const importFile = document.getElementById('import-file')
 
+  console.log('fileMenu:', fileMenu)
+  console.log('fileDropdown:', fileDropdown)
+
   // Toggle file dropdown
   fileMenu?.addEventListener('click', (e) => {
+    console.log('File menu clicked!')
     e.stopPropagation()
+    console.log('Current display:', fileDropdown?.style.display)
     fileDropdown.style.display = fileDropdown.style.display === 'none' ? 'block' : 'none'
+    console.log('New display:', fileDropdown?.style.display)
   })
 
   // Close dropdown when clicking menu items
@@ -98,6 +74,4 @@ export function bootstrap() {
     }
     e.target.value = '' // Reset input
   })
-
-  setActiveButton('translate')
 }
