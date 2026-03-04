@@ -1,6 +1,54 @@
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#e9e9e9}
-body{display:flex;flex-direction:column;height:100vh}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#e9e9e9;overflow:hidden;position:fixed;width:100%;-webkit-touch-callout:none;-webkit-user-select:none}
+body{display:flex;flex-direction:column;height:100vh;touch-action:none}
+
+/* Menu Bar */
+#menubar{
+  display:flex;align-items:center;
+  padding:4px 8px;background:#ffffff;border-bottom:1px solid #d0d0d0;
+  box-shadow:0 2px 4px rgba(0,0,0,.05);z-index:1001;
+  flex-shrink:0;-webkit-user-select:none;user-select:none;
+  position:relative;min-height:24px
+}
+
+.menu-group{position:relative;display:inline-block}
+
+.menu-btn{
+  background:none;border:none;padding:4px 8px;
+  font-size:13px;color:#333;font-family:inherit;
+  cursor:pointer;-webkit-user-select:none;user-select:none;
+  -webkit-appearance:none;appearance:none;
+  border-radius:3px;transition:.1s;
+  -webkit-touch-callout:none;touch-action:manipulation
+}
+
+.menu-btn:hover{background:rgba(0,0,0,.05)}
+
+.menu-btn:active{background:rgba(0,0,0,.1)}
+
+.menu-dropdown{
+  position:absolute;top:calc(100% + 2px);left:0;
+  background:#fff;border:1px solid #ccc;border-radius:3px;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);min-width:140px;
+  z-index:1002;-webkit-user-select:none;user-select:none
+}
+
+.menu-item{
+  display:block;width:100%;text-align:left;
+  padding:8px 12px;border:none;background:none;
+  font-size:13px;color:#333;font-family:inherit;
+  cursor:pointer;-webkit-appearance:none;appearance:none;
+  transition:.1s;-webkit-user-select:none;user-select:none;
+  -webkit-touch-callout:none;touch-action:manipulation
+}
+
+.menu-item:hover{background:rgba(0,0,0,.05)}
+
+.menu-item:active{background:rgba(0,0,0,.1)}
+
+.menu-item:first-child{border-radius:2px 2px 0 0}
+
+.menu-item:last-child{border-radius:0 0 2px 2px}
 
 .feedback-3d {
   display: flex;
@@ -37,13 +85,21 @@ body{display:flex;flex-direction:column;height:100vh}
   display:flex;align-items:center;gap:8px;
   padding:10px 14px;
   background:#f4f4f4;border-bottom:1px solid #d6d6d6;
-  box-shadow:0 4px 10px rgba(0,0,0,.06);z-index:10
+  box-shadow:0 4px 10px rgba(0,0,0,.06);z-index:1000;
+  position:relative;flex-shrink:0;
+  -webkit-user-select:none;user-select:none;
+  -webkit-touch-callout:none;
+  touch-action:manipulation
 }
 #toolbar button{
   position:relative;
   padding:6px 14px;font-size:14px;
   background:#fff;border:1px solid #d2d2d2;border-radius:8px;
-  cursor:pointer;transition:.15s
+  cursor:pointer;transition:.15s;
+  -webkit-user-select:none;user-select:none;
+  -webkit-touch-callout:none;
+  touch-action:manipulation;
+  -webkit-appearance:none;appearance:none
 }
 #toolbar button:hover{background:#ececec}
 #toolbar button.active{background:#dbe7ff;border-color:#5b8cff}
@@ -61,8 +117,8 @@ body{display:flex;flex-direction:column;height:100vh}
 }
 #toolbar button:hover::after{opacity:1;transform:none}
 
-#app{flex:1;position:relative;overflow:hidden}
-canvas{display:block;width:100%;height:100%}
+#app{flex:1;position:relative;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+canvas{display:block;width:100%;height:100%;touch-action:none}
 
 /* Group editing dropdown styles */
 .feedback-dropdown-container {
