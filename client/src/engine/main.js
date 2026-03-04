@@ -13,6 +13,11 @@ window.engine = engine
 // Initialize the UI
 bootstrap(engine)
 
+// Hide loading screen
+setTimeout(() => {
+  document.getElementById('loading-screen')?.classList.add('hidden')
+}, 500)
+
 // Toolbar sync
 const btn = {
   select: document.getElementById('tool-select'),

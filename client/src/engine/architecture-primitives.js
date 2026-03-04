@@ -33,7 +33,7 @@ export function createWall(params = {}) {
   // Base wall geometry
   const wallGeo = new THREE.BoxGeometry(width, height, thickness);
   const wallMat = material || new THREE.MeshStandardMaterial({ 
-    color: 0xcccccc,
+    color: 0x9aa3b2,
     side: THREE.DoubleSide
   });
   const wall = new THREE.Mesh(wallGeo, wallMat);
@@ -169,14 +169,14 @@ export function createRoom(params = {}) {
 
   // Floor
   const floorGeo = new THREE.PlaneGeometry(width, depth);
-  const floorMat = new THREE.MeshStandardMaterial({ color: 0x8b7355 });
+  const floorMat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   const floor = new THREE.Mesh(floorGeo, floorMat);
   floor.rotation.x = -Math.PI / 2;
   group.add(floor);
 
   // Ceiling
   const ceilingGeo = new THREE.PlaneGeometry(width, depth);
-  const ceilingMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const ceilingMat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   const ceiling = new THREE.Mesh(ceilingGeo, ceilingMat);
   ceiling.rotation.x = Math.PI / 2;
   ceiling.position.y = height;
@@ -203,8 +203,8 @@ export function createDoor(params = {}) {
   group.userData.type = 'Door';
   group.userData.params = params;
 
-  const frameMat = material || new THREE.MeshStandardMaterial({ color: 0x8b4513 });
-  const panelMat = new THREE.MeshStandardMaterial({ color: 0xd4a574 });
+  const frameMat = material || new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
+  const panelMat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
 
   // Frame
   const frameGeo = new THREE.BoxGeometry(width, height, frameThickness);
@@ -238,7 +238,7 @@ export function createWindow(params = {}) {
   group.userData.type = 'Window';
   group.userData.params = params;
 
-  const frameMat = material || new THREE.MeshStandardMaterial({ color: 0x333333 });
+  const frameMat = material || new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   const glassMat = new THREE.MeshStandardMaterial({
     color: 0x87ceeb,
     transparent: true,
@@ -275,7 +275,7 @@ export function createColumn(params = {}) {
   } = params;
 
   const geo = new THREE.CylinderGeometry(diameter / 2, diameter / 2, height, segments);
-  const mat = material || new THREE.MeshStandardMaterial({ color: 0x999999 });
+  const mat = material || new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   const mesh = new THREE.Mesh(geo, mat);
   
   mesh.userData.type = 'Column';
@@ -298,7 +298,7 @@ export function createBeam(params = {}) {
   } = params;
 
   const geo = new THREE.BoxGeometry(length, height, depth);
-  const mat = material || new THREE.MeshStandardMaterial({ color: 0x997755 });
+  const mat = material || new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   const mesh = new THREE.Mesh(geo, mat);
   
   mesh.userData.type = 'Beam';
@@ -329,7 +329,7 @@ export function createArch(params = {}) {
   group.userData.type = 'Arch';
   group.userData.params = params;
 
-  const mat = material || new THREE.MeshStandardMaterial({ color: 0xaa8844 });
+  const mat = material || new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   
   // Create lathe geometry for arch curve
   const points = [];
@@ -355,7 +355,7 @@ export function createArch(params = {}) {
   // Inner void (optional)
   const innerPoints = points.map(p => new THREE.Vector2(p.x * 0.7, p.y * 0.7));
   const innerLathe = new THREE.LatheGeometry(innerPoints, 8);
-  const innerMat = new THREE.MeshStandardMaterial({ color: 0x222222, side: THREE.BackSide });
+  const innerMat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2, side: THREE.BackSide });
   const innerArch = new THREE.Mesh(innerLathe, innerMat);
   innerArch.scale.set(1, 1, thickness / (radius * 0.5));
   innerArch.rotation.x = Math.PI / 2;
@@ -386,7 +386,7 @@ export function createPitchedRoof(params = {}) {
   group.userData.type = 'PitchedRoof';
   group.userData.params = params;
 
-  const mat = material || new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+  const mat = material || new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
 
   // Two triangular faces (gables)
   const vertices = new Float32Array([
@@ -415,7 +415,7 @@ export function createPitchedRoof(params = {}) {
 
   // Base edge (optional trim)
   const trimGeo = new THREE.BoxGeometry(width, 0.1, depth);
-  const trimMat = new THREE.MeshStandardMaterial({ color: 0x654321 });
+  const trimMat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   const trim = new THREE.Mesh(trimGeo, trimMat);
   trim.position.y = -0.05;
   group.add(trim);
@@ -440,7 +440,7 @@ export function createDome(params = {}) {
   } = params;
 
   const geo = new THREE.SphereGeometry(radius, widthSegments, heightSegments, 0, Math.PI * 2, 0, Math.PI / 2);
-  const mat = material || new THREE.MeshStandardMaterial({ color: 0xccaa88 });
+  const mat = material || new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   const dome = new THREE.Mesh(geo, mat);
   
   dome.userData.type = 'Dome';
@@ -471,7 +471,7 @@ export function createStairs(params = {}) {
   group.userData.type = 'Stairs';
   group.userData.params = params;
 
-  const mat = material || new THREE.MeshStandardMaterial({ color: 0x888888 });
+  const mat = material || new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
 
   // Create each step
   for (let i = 0; i < stepCount; i++) {
@@ -486,7 +486,7 @@ export function createStairs(params = {}) {
 
   // Optional: left railing
   const railGeo = new THREE.BoxGeometry(0.05, stepCount * stepHeight, stepCount * stepDepth);
-  const railMat = new THREE.MeshStandardMaterial({ color: 0x555555 });
+  const railMat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   const leftRail = new THREE.Mesh(railGeo, railMat);
   leftRail.position.x = -width / 2 - 0.05;
   leftRail.position.y = (stepCount * stepHeight) / 2;
@@ -525,7 +525,7 @@ export function createColumnWithCapital(params = {}) {
   group.userData.type = 'ColumnWithCapital';
   group.userData.params = params;
 
-  const mat = material || new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+  const mat = material || new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
   const accentMat = new THREE.MeshStandardMaterial({ color: 0x888888 });
 
   // Base plinth

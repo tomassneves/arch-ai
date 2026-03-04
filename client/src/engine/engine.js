@@ -60,6 +60,9 @@ export class Engine {
     this.groupEditMode = false; // Are we editing inside a group?
     this.groupEditTarget = null; // The group object being edited
     this.groupEditHistory = []; // Stack of groups being edited (for nested groups later)
+    
+    // Clipboard for copy/paste
+    this._clipboard = null;
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
@@ -1040,6 +1043,78 @@ export class Engine {
     this.emit('group:created', { group: groupObject, objects: selectedObjects });
   }
 
+  copyObject() {
+    if (!this.selected) {
+      console.warn('Cannot copy: no object selected');
+      return;
+    }
+    
+    // Store the selected object data in clipboard
+    this._clipboard = {
+      object: this.selected.clone(),
+      userData: JSON.parse(JSON.stringify(this.selected.userData)),
+      position: this.selected.position.clone(),
+      rotation: this.selected.rotation.clone(),
+      scale: this.selected.scale.clone()
+    };
+    
+    console.log('✅ Object copied to clipboard');
+  }
+
+  pasteObject() {
+    if (!this._clipboard) {
+      console.warn('Cannot paste: clipboard is empty');
+      return;
+    }
+    
+    // Clone the object from clipboard
+    const newObject = this._clipboard.object.clone();
+    newObject.userData = JSON.parse(JSON.stringify(this._clipboard.userData));
+    
+    // Offset position slightly so it's visible
+    newObject.position.copy(this._clipboard.position).add(new THREE.Vector3(0.5, 0, 0.5));
+    newObject.rotation.copy(this._clipboard.rotation);
+    newObject.scale.copy(this._clipboard.scale);
+    
+    // Add to scene
+    this.scene.add(newObject);
+    this._addSel(newObject);
+    this._push({ type: 'add', object: newObject });
+    
+    // Select the pasted object
+    this._deselAll();
+    this._sel(newObject);
+    this.setSelected(newObject);
+    
+    console.log('✅ Object pasted');
+  }
+
+  duplicateObject() {
+    if (!this.selected) {
+      console.warn('Cannot duplicate: no object selected');
+      return;
+    }
+    
+    // Clone the selected object
+    const newObject = this.selected.clone();
+    newObject.userData = JSON.parse(JSON.stringify(this.selected.userData));
+    
+    // Offset position slightly so it's visible
+    newObject.position.copy(this.selected.position).add(new THREE.Vector3(0.5, 0, 0.5));
+    
+    // Add to scene
+    this.scene.add(newObject);
+    this._addSel(newObject);
+    this._push({ type: 'add', object: newObject });
+    
+    // Select the duplicated object
+    this._deselAll();
+    this._sel(newObject);
+    this.setSelected(newObject);
+    
+    console.log('✅ Object duplicated');
+  }
+
   _keys(e) {
     const el = document.activeElement;
     const target = e.target;
@@ -1060,6 +1135,8 @@ export class Engine {
     const mod = e.ctrlKey || e.metaKey, k = e.key.toLowerCase();
     if (mod && k === "z") return e.preventDefault(), this.undo();
     if (mod && k === "y") return e.preventDefault(), this.redo();
+    if (mod && k === "c") return e.preventDefault(), this.copyObject();
+    if (mod && k === "v") return e.preventDefault(), this.pasteObject();
     if (k === "m") return this.setTool("translate");
     if (k === "r") return this.setTool("rotate");
     if (k === "s") return this.setTool("scale");
@@ -1069,6 +1146,12 @@ export class Engine {
         return this.exitGroupEdit();
       }
       return this.setTool("select");
+    }
+    if (e.key === "Escape") {
+      // Escape: exit group edit mode
+      if (this.groupEditMode) {
+        return this.exitGroupEdit();
+      }
     }
     if (k === "g") return this.exportGLB();
 
@@ -1144,7 +1227,7 @@ export class Engine {
   // simple parametric wall - width along x, depth along z
   addWall({ width = 1, height = 2.5, depth = 0.2, x = 0, z = 0 } = {}) {
     const geo = new THREE.BoxGeometry(width, height, depth);
-    const mat = new THREE.MeshStandardMaterial({ color: 0xcccccc });
+    const mat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(x + width / 2, height / 2, z + depth / 2);
     mesh.userData.selectable = true;
@@ -1155,7 +1238,7 @@ export class Engine {
   }
 
   // simple cylinder helper along Y axis
-  addCylinder({ diameter = 1, height = 1, x = 0, z = 0 } = {}) {
+  addCylinder({ diameter = 2, height = 2, x = 0, z = 0 } = {}) {
     const radius = diameter / 2;
     const geo = new THREE.CylinderGeometry(radius, radius, height, 32);
     const mat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
@@ -1168,21 +1251,44 @@ export class Engine {
     return mesh;
   }
 
-  // triangle helper
-  addTriangle({ size = 1, x = 0, z = 0 } = {}) {
+  // triangular prism helper (wedge shape)
+  addTriangle({ size = 2, x = 0, z = 0 } = {}) {
+    const width = size;
+    const height = size;
+    const depth = size;
+    
     const vertices = new Float32Array([
-      -size / 2, 0, -size / 2,  // bottom-left
-       size / 2, 0, -size / 2,  // bottom-right
-       0, size, 0                // top
+      // Front triangular face
+      -width / 2, 0, depth / 2,        // 0 bottom-left
+       width / 2, 0, depth / 2,        // 1 bottom-right
+       0, height, depth / 2,           // 2 top
+      
+      // Back triangular face
+      -width / 2, 0, -depth / 2,       // 3 bottom-left
+       width / 2, 0, -depth / 2,       // 4 bottom-right
+       0, height, -depth / 2,          // 5 top
     ]);
-    const indices = new Uint16Array([0, 1, 2]);
+    
+    const indices = new Uint16Array([
+      // Front face
+      0, 1, 2,
+      // Back face
+      4, 3, 5,
+      // Bottom face
+      3, 4, 1, 3, 1, 0,
+      // Left slope
+      3, 0, 2, 3, 2, 5,
+      // Right slope
+      1, 4, 5, 1, 5, 2
+    ]);
+    
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     geo.setIndex(new THREE.BufferAttribute(indices, 1));
     geo.computeVertexNormals();
-    const mat = new THREE.MeshStandardMaterial({ color: 0xff6b6b });
+    const mat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
     const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(x, size / 2, z);
+    mesh.position.set(x, 0, z);
     mesh.userData.selectable = true;
     this.scene.add(mesh);
     this._addSel(mesh);
@@ -1193,7 +1299,7 @@ export class Engine {
   // sphere helper
   addSphere({ radius = 1, x = 0, y = 0, z = 0 } = {}) {
     const geo = new THREE.SphereGeometry(radius, 32, 32);
-    const mat = new THREE.MeshStandardMaterial({ color: 0x4caf50 });
+    const mat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(x, y + radius, z);
     mesh.userData.selectable = true;
@@ -1206,7 +1312,7 @@ export class Engine {
   // cone helper
   addCone({ radius = 1, height = 2, x = 0, z = 0 } = {}) {
     const geo = new THREE.ConeGeometry(radius, height, 32);
-    const mat = new THREE.MeshStandardMaterial({ color: 0x8bc34a });
+    const mat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(x, height / 2, z);
     mesh.userData.selectable = true;
@@ -1219,7 +1325,7 @@ export class Engine {
   // torus helper - perfect for wheels/tires
   addTorus({ outerRadius = 0.5, tubeRadius = 0.15, x = 0, y = 0, z = 0, axis = 'x' } = {}) {
     const geo = new THREE.TorusGeometry(outerRadius, tubeRadius, 16, 32);
-    const mat = new THREE.MeshStandardMaterial({ color: 0x333333 });
+    const mat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
     const mesh = new THREE.Mesh(geo, mat);
     
     // Rotate based on axis (torus default is Y axis, rotate for X or Z)
@@ -1240,7 +1346,7 @@ export class Engine {
   // box helper - like cube but with separate dimensions (better for vehicles, furniture)
   addBox({ width = 2, height = 1, depth = 1, x = 0, y = 0, z = 0 } = {}) {
     const geo = new THREE.BoxGeometry(width, height, depth);
-    const mat = new THREE.MeshStandardMaterial({ color: 0x6a9fb5 });
+    const mat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(x, y + height / 2, z);
     mesh.userData.selectable = true;
@@ -1257,7 +1363,7 @@ export class Engine {
     // Create cylinder body
     const cylinderHeight = length - (2 * radius);
     const cylinderGeo = new THREE.CylinderGeometry(radius, radius, cylinderHeight, 16);
-    const mat = new THREE.MeshStandardMaterial({ color: 0x9c88d4 });
+    const mat = new THREE.MeshStandardMaterial({ color: 0x9aa3b2 });
     const cylinder = new THREE.Mesh(cylinderGeo, mat);
     
     // Create sphere caps
@@ -1875,8 +1981,39 @@ export class Engine {
         const canCreateGroup = selectedCount > 1;
         const canEditGroup = isComposite && !this.groupEditMode;
         const canExitGroup = this.groupEditMode;
+        const hasClipboard = this._clipboard !== null;
         
-        // Always add all three options, but enable/disable based on state
+        // Copy/Paste/Duplicate options
+        menuItems.push({
+          label: 'Copy',
+          enabled: true,
+          action: () => {
+            this.copyObject();
+            dropdownMenu.style.display = 'none';
+          }
+        });
+        
+        menuItems.push({
+          label: 'Paste',
+          enabled: hasClipboard,
+          action: () => {
+            if (hasClipboard) {
+              this.pasteObject();
+              dropdownMenu.style.display = 'none';
+            }
+          }
+        });
+        
+        menuItems.push({
+          label: 'Duplicate',
+          enabled: true,
+          action: () => {
+            this.duplicateObject();
+            dropdownMenu.style.display = 'none';
+          }
+        });
+        
+        // Group management options
         menuItems.push({
           label: 'Create Group',
           enabled: canCreateGroup,
