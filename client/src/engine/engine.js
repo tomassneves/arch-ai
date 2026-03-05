@@ -38,8 +38,17 @@ export class Engine {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xf0f0f0);
 
-    this.camera = new THREE.PerspectiveCamera(60, 1, 0.1, 2000);
-    this.camera.position.set(6, 5, 8);
+    // Perspective camera
+    this.perspectiveCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 2000);
+    this.perspectiveCamera.position.set(6, 5, 8);
+    
+    // Orthographic camera (will be sized in _resize)
+    this.orthographicCamera = new THREE.OrthographicCamera(-10, 10, 10, -10, 0.1, 2000);
+    this.orthographicCamera.position.set(6, 5, 8);
+    
+    // Active camera (start with perspective, but will switch to orthographic on first ViewCube click)
+    this.camera = this.perspectiveCamera;
+    this.isOrthographic = false; // Track current projection mode
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -66,6 +75,9 @@ export class Engine {
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
+    
+    // Store controls reference for camera switching
+    this._orbitControls = this.controls;
 
     // ViewCube setup
     this._setupViewCube();
@@ -328,10 +340,60 @@ export class Engine {
 
   _resize() {
     const w = this.container.clientWidth, h = this.container.clientHeight;
-    this.camera.aspect = w / h;
-    this.camera.updateProjectionMatrix();
+    const aspect = w / h;
+    
+    // Update perspective camera
+    this.perspectiveCamera.aspect = aspect;
+    this.perspectiveCamera.updateProjectionMatrix();
+    
+    // Update orthographic camera
+    const frustumSize = 10;
+    this.orthographicCamera.left = -frustumSize * aspect;
+    this.orthographicCamera.right = frustumSize * aspect;
+    this.orthographicCamera.top = frustumSize;
+    this.orthographicCamera.bottom = -frustumSize;
+    this.orthographicCamera.updateProjectionMatrix();
+    
     this.renderer.setSize(w, h);
     this.css3DRenderer.setSize(w, h);
+  }
+
+  /**
+   * Toggle between perspective and orthographic projection
+   */
+  toggleProjection() {
+    const target = this._orbitControls.target.clone();
+    const distance = this.camera.position.distanceTo(target);
+    const currentPosition = this.camera.position.clone();
+    
+    if (this.isOrthographic) {
+      // Switch to perspective
+      this.perspectiveCamera.position.copy(currentPosition);
+      this.perspectiveCamera.lookAt(target);
+      this.camera = this.perspectiveCamera;
+      this.isOrthographic = false;
+    } else {
+      // Switch to orthographic
+      // Adjust orthographic zoom to match perspective view
+      const frustumSize = distance * Math.tan((this.perspectiveCamera.fov * Math.PI) / 360);
+      const aspect = this.container.clientWidth / this.container.clientHeight;
+      this.orthographicCamera.left = -frustumSize * aspect;
+      this.orthographicCamera.right = frustumSize * aspect;
+      this.orthographicCamera.top = frustumSize;
+      this.orthographicCamera.bottom = -frustumSize;
+      this.orthographicCamera.updateProjectionMatrix();
+      
+      this.orthographicCamera.position.copy(currentPosition);
+      this.orthographicCamera.lookAt(target);
+      this.camera = this.orthographicCamera;
+      this.isOrthographic = true;
+    }
+    
+    // Update orbit controls to use new camera
+    this._orbitControls.object = this.camera;
+    this._orbitControls.update();
+    
+    console.log(`Switched to ${this.isOrthographic ? 'Orthographic' : 'Perspective'} projection`);
   }
 
   // History helpers
@@ -2993,27 +3055,30 @@ export class Engine {
     const faceLabels = ['RIGHT', 'LEFT', 'TOP', 'BOTTOM', 'FRONT', 'BACK'];
     const materials = faceLabels.map(label => {
       const canvas = document.createElement('canvas');
-      canvas.width = 128;
-      canvas.height = 128;
+      canvas.width = 256;
+      canvas.height = 256;
       const ctx = canvas.getContext('2d');
       
       // Background
       ctx.fillStyle = '#3a3f4b';
-      ctx.fillRect(0, 0, 128, 128);
+      ctx.fillRect(0, 0, 256, 256);
       
       // Border
       ctx.strokeStyle = '#5a5f6b';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(2, 2, 124, 124);
+      ctx.lineWidth = 4;
+      ctx.strokeRect(4, 4, 248, 248);
       
       // Text
       ctx.fillStyle = '#aaa';
-      ctx.font = 'bold 18px Arial';
+      ctx.font = 'bold 48px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(label, 64, 64);
+      ctx.fillText(label, 128, 128);
       
       const texture = new THREE.CanvasTexture(canvas);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.generateMipmaps = false;
       return new THREE.MeshBasicMaterial({ 
         map: texture,
         transparent: false,
@@ -3023,6 +3088,27 @@ export class Engine {
     
     this._viewCubeMaterials = materials; // Store for hover effects
     this._viewCubeHoveredFace = null; // Track currently hovered face
+    this._viewCubeHoveredSection = null; // Track hovered section
+    
+    // Store base textures for restoring after highlight
+    this._viewCubeBaseCanvases = [];
+    faceLabels.forEach((label, i) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#3a3f4b';
+      ctx.fillRect(0, 0, 256, 256);
+      ctx.strokeStyle = '#5a5f6b';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(4, 4, 248, 248);
+      ctx.fillStyle = '#aaa';
+      ctx.font = 'bold 48px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, 128, 128);
+      this._viewCubeBaseCanvases.push(canvas);
+    });
     
     this._viewCube = new THREE.Mesh(cubeGeometry, materials);
     this._viewCubeScene.add(this._viewCube);
@@ -3035,9 +3121,11 @@ export class Engine {
     
     // Raycaster for ViewCube interaction
     this._viewCubeRaycaster = new THREE.Raycaster();
+    this._viewCubeMouseDownData = null; // Track face/section on mousedown
     
-    // Add click listener for ViewCube
-    this.renderer.domElement.addEventListener('click', (e) => this._onViewCubeClick(e));
+    // Add mousedown/mouseup listeners for ViewCube (only select if clicked, not dragged)
+    this.renderer.domElement.addEventListener('mousedown', (e) => this._onViewCubeMouseDown(e));
+    this.renderer.domElement.addEventListener('mouseup', (e) => this._onViewCubeMouseUp(e));
     
     // Add mousemove listener for hover effects
     this.renderer.domElement.addEventListener('mousemove', (e) => this._onViewCubeHover(e));
@@ -3052,12 +3140,366 @@ export class Engine {
       4: { name: 'FRONT', dir: new THREE.Vector3(0, 0, 1) },
       5: { name: 'BACK', dir: new THREE.Vector3(0, 0, -1) }
     };
+    
+    // Create projection toggle button
+    this._createProjectionToggle();
+    
+    // Create rotation arrows near ViewCube
+    this._createRotationArrows();
   }
   
   /**
-   * Handle click on ViewCube to rotate camera
+   * Create projection toggle button (Perspective/Orthographic)
    */
-  _onViewCubeClick(event) {
+  _createProjectionToggle() {
+    // Create container - positioned just below ViewCube
+    const container = document.createElement('div');
+    container.id = 'projection-toggle-container';
+    container.style.cssText = `
+      position: fixed;
+      top: 200px;
+      right: 10px;
+      z-index: 1000;
+    `;
+    
+    // Create toggle button with chevron icon
+    const button = document.createElement('button');
+    button.id = 'projection-toggle';
+    button.innerHTML = `
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#999" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block; transition: transform 0.2s ease;">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    `;
+    button.style.cssText = `
+      background: none;
+      color: #999;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+    `;
+    
+    // Create dropdown menu
+    const dropdown = document.createElement('div');
+    dropdown.id = 'projection-dropdown';
+    dropdown.style.cssText = `
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      min-width: 135px;
+      display: none;
+    `;
+    
+    // Create menu items
+    const perspectiveItem = document.createElement('button');
+    perspectiveItem.className = 'menu-item';
+    perspectiveItem.id = 'perspective-option';
+    perspectiveItem.innerHTML = 'Perspective <span class="projection-mark">✓</span>';
+    perspectiveItem.style.cssText = `
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      text-align: left;
+      padding: 8px 12px;
+      border: none;
+      background: none;
+      font-size: 13px;
+      color: #333;
+      cursor: pointer;
+      transition: .1s;
+    `;
+    
+    const orthographicItem = document.createElement('button');
+    orthographicItem.className = 'menu-item';
+    orthographicItem.id = 'orthographic-option';
+    orthographicItem.innerHTML = 'Orthographic <span class="projection-mark">✓</span>';
+    orthographicItem.style.cssText = `
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      text-align: left;
+      padding: 8px 12px;
+      border: none;
+      background: none;
+      font-size: 13px;
+      color: #333;
+      cursor: pointer;
+      transition: .1s;
+    `;
+    
+    // Helper function to update checkmarks
+    const updateCheckmarks = () => {
+      const perspectiveMark = perspectiveItem.querySelector('.projection-mark');
+      const orthographicMark = orthographicItem.querySelector('.projection-mark');
+      
+      if (this.isOrthographic) {
+        perspectiveMark.style.visibility = 'hidden';
+        orthographicMark.style.visibility = 'visible';
+      } else {
+        perspectiveMark.style.visibility = 'visible';
+        orthographicMark.style.visibility = 'hidden';
+      }
+    };
+    
+    // Hover effects for menu items
+    [perspectiveItem, orthographicItem].forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        item.style.background = 'rgba(0,0,0,.05)';
+      });
+      item.addEventListener('mouseleave', () => {
+        item.style.background = 'none';
+      });
+    });
+    
+    // Button hover effect
+    button.addEventListener('mouseenter', () => {
+      button.style.opacity = '0.7';
+    });
+    button.addEventListener('mouseleave', () => {
+      button.style.opacity = '1';
+    });
+    
+    // Toggle dropdown on button click
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.style.display === 'none';
+      dropdown.style.display = isOpen ? 'block' : 'none';
+      
+      // Update checkmarks when opening dropdown
+      if (isOpen) {
+        updateCheckmarks();
+      }
+      
+      // Rotate arrow
+      const svg = button.querySelector('svg');
+      svg.style.transform = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+    
+    // Perspective item click
+    perspectiveItem.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (this.isOrthographic) {
+        this.toggleProjection();
+      }
+      updateCheckmarks();
+      dropdown.style.display = 'none';
+      
+      // Reset arrow rotation
+      const svg = button.querySelector('svg');
+      svg.style.transform = 'rotate(0deg)';
+    });
+    
+    // Orthographic item click
+    orthographicItem.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!this.isOrthographic) {
+        this.toggleProjection();
+      }
+      updateCheckmarks();
+      dropdown.style.display = 'none';
+      
+      // Reset arrow rotation
+      const svg = button.querySelector('svg');
+      svg.style.transform = 'rotate(0deg)';
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!container.contains(e.target)) {
+        dropdown.style.display = 'none';
+        
+        // Reset arrow rotation
+        const svg = button.querySelector('svg');
+        svg.style.transform = 'rotate(0deg)';
+      }
+    });
+    
+    // Assemble the dropdown
+    dropdown.appendChild(perspectiveItem);
+    dropdown.appendChild(orthographicItem);
+    container.appendChild(button);
+    container.appendChild(dropdown);
+    
+    document.body.appendChild(container);
+    
+    // Initialize checkmarks
+    updateCheckmarks();
+    
+    this._projectionToggleButton = button;
+  }
+  
+  /**
+   * Create rotation arrows near ViewCube for horizontal view rotation
+   */
+  _createRotationArrows() {
+    // Create container positioned above ViewCube, centered
+    const container = document.createElement('div');
+    container.id = 'rotation-arrows-container';
+    container.style.cssText = `
+      position: fixed;
+      top: 95px;
+      right: 100px;
+      z-index: 1001;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-direction: row;
+      transform: translateX(50%);
+    `;
+    
+    // Left rotation arrow (counter-clockwise, -90°) - slightly higher
+    const topBtn = document.createElement('button');
+    topBtn.id = 'rotate-top-arrow';
+    topBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 10C2 10 5.5 4 12 4c5 0 9 4 9 9"/>
+        <polyline points="2 4 2 10 8 10"/>
+      </svg>
+    `;
+    topBtn.style.cssText = `
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s;
+      opacity: 0.7;
+    `;
+    
+    topBtn.addEventListener('mouseenter', () => {
+      topBtn.style.opacity = '1';
+    });
+    topBtn.addEventListener('mouseleave', () => {
+      topBtn.style.opacity = '0.7';
+    });
+    
+    topBtn.addEventListener('click', () => {
+      this._rotateViewByAngle(-90);
+    });
+    
+    // Right rotation arrow (clockwise, +90°) - slightly lower
+    const bottomBtn = document.createElement('button');
+    bottomBtn.id = 'rotate-bottom-arrow';
+    bottomBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 10C22 10 18.5 4 12 4c-5 0-9 4-9 9"/>
+        <polyline points="22 4 22 10 16 10"/>
+      </svg>
+    `;
+    bottomBtn.style.cssText = `
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s;
+      opacity: 0.7;
+    `;
+    
+    bottomBtn.addEventListener('mouseenter', () => {
+      bottomBtn.style.opacity = '1';
+    });
+    bottomBtn.addEventListener('mouseleave', () => {
+      bottomBtn.style.opacity = '0.7';
+    });
+    
+    bottomBtn.addEventListener('click', () => {
+      this._rotateViewByAngle(90);
+    });
+    
+    container.appendChild(topBtn);
+    container.appendChild(bottomBtn);
+    document.body.appendChild(container);
+  }
+  
+  /**
+   * Rotate view by a relative angle around the camera's look direction (canvas rotation)
+   */
+  _rotateViewByAngle(angleDelta) {
+    // Prevent overlapping animations
+    if (this._isRotating) return;
+    this._isRotating = true;
+    
+    const target = this.controls.target.clone();
+    const currentPos = this.camera.position.clone();
+    
+    // Get camera's forward direction (from camera to target)
+    const forward = target.clone().sub(currentPos).normalize();
+    
+    // Get current up vector
+    const currentUp = this.camera.up.clone();
+    
+    // Determine if we need to flip the rotation direction based on camera orientation
+    // For side views (FRONT/BACK/LEFT/RIGHT), check if the forward direction 
+    // has a positive component in the dominant horizontal axis
+    let adjustedAngle = angleDelta;
+    const absX = Math.abs(forward.x);
+    const absY = Math.abs(forward.y);
+    const absZ = Math.abs(forward.z);
+    
+    // If looking from the side (X or Z dominant), check orientation
+    if (absY < 0.7) { // Not top/bottom view
+      // For side views, adjust based on forward direction
+      if (absZ > absX) {
+        // FRONT or BACK view (Z dominant)
+        if (forward.z > 0) adjustedAngle = -angleDelta;
+      } else {
+        // LEFT or RIGHT view (X dominant)  
+        if (forward.x < 0) adjustedAngle = -angleDelta;
+      }
+    }
+    
+    // Create rotation quaternion around the forward axis
+    const rotationAngle = (adjustedAngle * Math.PI) / 180;
+    const quaternion = new THREE.Quaternion().setFromAxisAngle(forward, rotationAngle);
+    
+    // Rotate the up vector
+    const newUp = currentUp.applyQuaternion(quaternion).normalize();
+    
+    // Animate the up vector change
+    const startUp = this.camera.up.clone();
+    const startTime = Date.now();
+    const duration = 300;
+    
+    const animateCamera = () => {
+      const elapsed = Date.now() - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      
+      // Interpolate up vector
+      this.camera.up.lerpVectors(startUp, newUp, eased).normalize();
+      this.camera.lookAt(target);
+      this.controls.update();
+      
+      if (t < 1) {
+        requestAnimationFrame(animateCamera);
+      } else {
+        this._isRotating = false;
+      }
+    };
+    
+    animateCamera();
+  }
+  
+  /**
+   * Get ViewCube face and section at mouse position
+   */
+  _getViewCubeFaceAtPosition(event) {
     const rect = this.renderer.domElement.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
@@ -3065,36 +3507,147 @@ export class Engine {
     const h = rect.height;
     
     // ViewCube is in top-right corner
-    const cubeSize = 150;
+    const cubeSize = 180;
     const margin = 10;
     const cubeLeft = w - cubeSize - margin;
     const cubeTop = margin;
     
-    // Check if click is within ViewCube area
+    // Check if position is within ViewCube area
     if (x < cubeLeft || x > cubeLeft + cubeSize || y < cubeTop || y > cubeTop + cubeSize) {
-      return; // Click outside ViewCube
+      return null;
     }
     
     // Convert to normalized coordinates within ViewCube
     const cubeX = ((x - cubeLeft) / cubeSize) * 2 - 1;
     const cubeY = -((y - cubeTop) / cubeSize) * 2 + 1;
     
-    // Raycast against ViewCube mesh only (ignore edge line child)
+    // Raycast against ViewCube mesh only
     this._viewCubeRaycaster.setFromCamera(new THREE.Vector2(cubeX, cubeY), this._viewCubeCamera);
     const intersects = this._viewCubeRaycaster.intersectObject(this._viewCube, false);
     const hit = intersects.find(i => i.object === this._viewCube && i.face);
     
-    if (hit && hit.face) {
-      // Get material index directly from the face - this is reliable
-      const materialIndex = hit.face.materialIndex;
-      const face = this._viewCubeFaces[materialIndex];
+    if (hit && hit.face && hit.uv) {
+      // Determine which section of the 3x3 grid was clicked
+      const u = hit.uv.x;
+      const v = hit.uv.y;
       
-      console.log('ViewCube clicked, materialIndex:', materialIndex, 'face:', face?.name);
+      // Section indices (0, 1, 2 for each axis) - center is bigger (50%)
+      const sectionX = u < 0.25 ? 0 : (u < 0.75 ? 1 : 2);
+      const sectionY = v < 0.25 ? 0 : (v < 0.75 ? 1 : 2);
+      
+      return {
+        faceIndex: hit.face.materialIndex,
+        sectionX: sectionX,
+        sectionY: sectionY,
+        isCenter: sectionX === 1 && sectionY === 1,
+        isEdge: (sectionX === 1 || sectionY === 1) && !(sectionX === 1 && sectionY === 1),
+        isCorner: sectionX !== 1 && sectionY !== 1
+      };
+    }
+    return null;
+  }
+
+  /**
+   * Handle mousedown on ViewCube
+   */
+  _onViewCubeMouseDown(event) {
+    this._viewCubeMouseDownData = this._getViewCubeFaceAtPosition(event);
+  }
+
+  /**
+   * Handle mouseup on ViewCube - only select if same face as mousedown
+   */
+  _onViewCubeMouseUp(event) {
+    const clickData = this._getViewCubeFaceAtPosition(event);
+    
+    // Only trigger selection if mouseup is on the same face as mousedown
+    if (clickData !== null && 
+        this._viewCubeMouseDownData !== null &&
+        clickData.faceIndex === this._viewCubeMouseDownData.faceIndex) {
+      
+      const faceIndex = clickData.faceIndex;
+      const face = this._viewCubeFaces[faceIndex];
       
       if (face) {
-        this._setCameraView(face.dir, face.name);
+        // Calculate view direction based on section clicked
+        let viewDir = face.dir.clone();
+        
+        if (clickData.isCenter) {
+          // Center: pure face view
+          this._setCameraView(viewDir, face.name);
+        } else if (clickData.isEdge) {
+          // Edge: blend two face directions
+          const edgeDir = this._getEdgeDirection(faceIndex, clickData.sectionX, clickData.sectionY);
+          this._setCameraView(edgeDir.dir, edgeDir.name);
+        } else if (clickData.isCorner) {
+          // Corner: blend three face directions (isometric view)
+          const cornerDir = this._getCornerDirection(faceIndex, clickData.sectionX, clickData.sectionY);
+          this._setCameraView(cornerDir.dir, cornerDir.name);
+        }
       }
     }
+    
+    this._viewCubeMouseDownData = null;
+  }
+  
+  /**
+   * Get direction for edge view
+   */
+  _getEdgeDirection(faceIndex, sectionX, sectionY) {
+    const faceDir = this._viewCubeFaces[faceIndex].dir.clone();
+    let secondDir = new THREE.Vector3();
+    let name = '';
+    
+    // Determine which adjacent face based on section position
+    // Face order: 0=RIGHT(+X), 1=LEFT(-X), 2=TOP(+Y), 3=BOTTOM(-Y), 4=FRONT(+Z), 5=BACK(-Z)
+    
+    // Map face index to axis: 0,1 = X axis, 2,3 = Y axis, 4,5 = Z axis
+    const faceAxis = Math.floor(faceIndex / 2);
+    
+    if (faceAxis === 0) { // RIGHT or LEFT face (X axis)
+      if (sectionY === 2) secondDir.set(0, 1, 0);  // Top edge
+      else if (sectionY === 0) secondDir.set(0, -1, 0);  // Bottom edge
+      else if (sectionX === 0) secondDir.set(0, 0, -1);  // Back edge
+      else if (sectionX === 2) secondDir.set(0, 0, 1);  // Front edge
+    } else if (faceAxis === 1) { // TOP or BOTTOM face (Y axis)
+      if (sectionY === 2) secondDir.set(0, 0, -1);  // Back edge
+      else if (sectionY === 0) secondDir.set(0, 0, 1);  // Front edge
+      else if (sectionX === 0) secondDir.set(-1, 0, 0);  // Left edge
+      else if (sectionX === 2) secondDir.set(1, 0, 0);  // Right edge
+    } else { // FRONT or BACK face (Z axis)
+      if (sectionY === 2) secondDir.set(0, 1, 0);  // Top edge
+      else if (sectionY === 0) secondDir.set(0, -1, 0);  // Bottom edge
+      else if (sectionX === 0) secondDir.set(-1, 0, 0);  // Left edge
+      else if (sectionX === 2) secondDir.set(1, 0, 0);  // Right edge
+    }
+    
+    const blendedDir = faceDir.add(secondDir).normalize();
+    return { dir: blendedDir, name: 'Edge' };
+  }
+  
+  /**
+   * Get direction for corner view (isometric)
+   */
+  _getCornerDirection(faceIndex, sectionX, sectionY) {
+    const faceDir = this._viewCubeFaces[faceIndex].dir.clone();
+    let dir1 = new THREE.Vector3();
+    let dir2 = new THREE.Vector3();
+    
+    const faceAxis = Math.floor(faceIndex / 2);
+    
+    if (faceAxis === 0) { // RIGHT or LEFT face
+      dir1.set(0, sectionY === 2 ? 1 : -1, 0);
+      dir2.set(0, 0, sectionX === 2 ? 1 : -1);
+    } else if (faceAxis === 1) { // TOP or BOTTOM face
+      dir1.set(sectionX === 2 ? 1 : -1, 0, 0);
+      dir2.set(0, 0, sectionY === 0 ? 1 : -1);
+    } else { // FRONT or BACK face
+      dir1.set(sectionX === 2 ? 1 : -1, 0, 0);
+      dir2.set(0, sectionY === 2 ? 1 : -1, 0);
+    }
+    
+    const blendedDir = faceDir.add(dir1).add(dir2).normalize();
+    return { dir: blendedDir, name: 'Corner' };
   }
   
   /**
@@ -3108,7 +3661,7 @@ export class Engine {
     const h = rect.height;
     
     // ViewCube is in top-right corner
-    const cubeSize = 150;
+    const cubeSize = 180;
     const margin = 10;
     const cubeLeft = w - cubeSize - margin;
     const cubeTop = margin;
@@ -3136,45 +3689,122 @@ export class Engine {
     const intersects = this._viewCubeRaycaster.intersectObject(this._viewCube, false);
     const hit = intersects.find(i => i.object === this._viewCube && i.face);
     
-    if (hit && hit.face) {
-      // Get material index directly from the face - this is reliable
+    if (hit && hit.face && hit.uv) {
       const materialIndex = hit.face.materialIndex;
       
-      console.log('ViewCube hover, materialIndex:', materialIndex);
+      // Determine which section of the 3x3 grid is hovered - center is bigger (50%)
+      const u = hit.uv.x;
+      const v = hit.uv.y;
+      const sectionX = u < 0.25 ? 0 : (u < 0.75 ? 1 : 2);
+      const sectionY = v < 0.25 ? 0 : (v < 0.75 ? 1 : 2);
+      const sectionKey = `${materialIndex}-${sectionX}-${sectionY}`;
       
-      // Highlight the hovered face
-      if (this._viewCubeHoveredFace !== materialIndex) {
-        // Reset all materials
-        this._viewCubeMaterials.forEach(mat => {
-          mat.color.setHex(0xffffff);
-          mat.needsUpdate = true;
-        });
+      // Only update if section changed
+      if (this._viewCubeHoveredSection !== sectionKey) {
+        // Reset all materials to base textures
+        this._resetViewCubeTextures();
         
-        // Highlight the hovered face with slight yellow tint
-        if (materialIndex >= 0 && materialIndex < this._viewCubeMaterials.length) {
-          this._viewCubeMaterials[materialIndex].color.setHex(0xffffcc);
-          this._viewCubeMaterials[materialIndex].needsUpdate = true;
-          this._viewCubeHoveredFace = materialIndex;
-        }
+        // Draw highlight on hovered section
+        this._highlightViewCubeSection(materialIndex, sectionX, sectionY);
+        
+        this._viewCubeHoveredFace = materialIndex;
+        this._viewCubeHoveredSection = sectionKey;
         this.renderer.domElement.style.cursor = 'pointer';
       }
     } else {
       // Not hovering over a face
       if (this._viewCubeHoveredFace !== null) {
-        this._viewCubeMaterials.forEach(mat => {
-          mat.color.setHex(0xffffff);
-          mat.needsUpdate = true;
-        });
+        this._resetViewCubeTextures();
         this._viewCubeHoveredFace = null;
+        this._viewCubeHoveredSection = null;
         this.renderer.domElement.style.cursor = 'default';
       }
     }
   }
   
   /**
+   * Reset all ViewCube textures to base state
+   */
+  _resetViewCubeTextures() {
+    this._viewCubeMaterials.forEach((mat, i) => {
+      mat.color.setHex(0xffffff);
+      mat.needsUpdate = true;
+    });
+  }
+  
+  /**
+   * Highlight a specific section on a ViewCube face
+   */
+  _highlightViewCubeSection(faceIndex, sectionX, sectionY) {
+    const mat = this._viewCubeMaterials[faceIndex];
+    const baseCanvas = this._viewCubeBaseCanvases[faceIndex];
+    
+    // Create new canvas with highlight
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    
+    // Draw base texture
+    ctx.drawImage(baseCanvas, 0, 0);
+    
+    // Calculate section bounds - edges are 25%, center is 50%
+    const edgeSize = 256 * 0.25;
+    const centerSize = 256 * 0.5;
+    
+    let x, y, width, height;
+    
+    // X position and width
+    if (sectionX === 0) {
+      x = 0;
+      width = edgeSize;
+    } else if (sectionX === 1) {
+      x = edgeSize;
+      width = centerSize;
+    } else {
+      x = edgeSize + centerSize;
+      width = edgeSize;
+    }
+    
+    // Y position and height (flipped for canvas coords)
+    if (sectionY === 2) {
+      y = 0;
+      height = edgeSize;
+    } else if (sectionY === 1) {
+      y = edgeSize;
+      height = centerSize;
+    } else {
+      y = edgeSize + centerSize;
+      height = edgeSize;
+    }
+    
+    // Draw highlight rectangle
+    ctx.fillStyle = 'rgba(100, 150, 200, 0.4)';
+    ctx.fillRect(x + 2, y + 2, width - 4, height - 4);
+    
+    // Draw highlight border
+    ctx.strokeStyle = 'rgba(120, 180, 230, 0.8)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x + 2, y + 2, width - 4, height - 4);
+    
+    // Update texture
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.generateMipmaps = false;
+    mat.map = texture;
+    mat.needsUpdate = true;
+  }
+  
+  /**
    * Animate camera to a preset view direction
    */
   _setCameraView(direction, viewName) {
+    // Switch to orthographic projection by default when clicking ViewCube faces
+    if (!this.isOrthographic) {
+      this.toggleProjection();
+    }
+    
     const target = this.controls.target.clone();
     const distance = this.camera.position.distanceTo(target);
     
@@ -3220,8 +3850,9 @@ export class Engine {
     // Render ViewCube in top-right corner
     const w = this.container.clientWidth;
     const h = this.container.clientHeight;
-    const cubeSize = 150;
+    const cubeSize = 180;
     const margin = 10;
+    const pixelRatio = this.renderer.getPixelRatio();
     
     this.renderer.setViewport(w - cubeSize - margin, h - cubeSize - margin, cubeSize, cubeSize);
     this.renderer.setScissor(w - cubeSize - margin, h - cubeSize - margin, cubeSize, cubeSize);
