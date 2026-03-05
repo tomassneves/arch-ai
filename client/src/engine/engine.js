@@ -322,6 +322,7 @@ export class Engine {
     }
     
     this.renderer.render(this.scene, this.camera);
+    this._renderViewCube();
     this.css3DRenderer.render(this.css3DScene, this.camera);
   }
 
@@ -2969,6 +2970,272 @@ export class Engine {
     if (scale) mesh.scale.set(scale.x || 1, scale.y || 1, scale.z || 1);
 
     return mesh;
+  }
+
+  /**
+   * Setup the ViewCube for camera orientation
+   */
+  _setupViewCube() {
+    // Create ViewCube scene and camera
+    this._viewCubeScene = new THREE.Scene();
+    this._viewCubeScene.background = null; // Transparent background
+    this._viewCubeCamera = new THREE.OrthographicCamera(-1.5, 1.5, 1.5, -1.5, 0.1, 10);
+    this._viewCubeCamera.position.set(0, 0, 3);
+    
+    // Add light to ViewCube scene
+    this._viewCubeScene.add(new THREE.AmbientLight(0xffffff, 0.8));
+    
+    // Create the cube with face labels
+    const cubeSize = 1;
+    const cubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+    
+    // Create canvas textures for each face
+    const faceLabels = ['RIGHT', 'LEFT', 'TOP', 'BOTTOM', 'FRONT', 'BACK'];
+    const materials = faceLabels.map(label => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 128;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      
+      // Background
+      ctx.fillStyle = '#3a3f4b';
+      ctx.fillRect(0, 0, 128, 128);
+      
+      // Border
+      ctx.strokeStyle = '#5a5f6b';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(2, 2, 124, 124);
+      
+      // Text
+      ctx.fillStyle = '#aaa';
+      ctx.font = 'bold 18px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, 64, 64);
+      
+      const texture = new THREE.CanvasTexture(canvas);
+      return new THREE.MeshBasicMaterial({ 
+        map: texture,
+        transparent: false,
+        color: 0xffffff
+      });
+    });
+    
+    this._viewCubeMaterials = materials; // Store for hover effects
+    this._viewCubeHoveredFace = null; // Track currently hovered face
+    
+    this._viewCube = new THREE.Mesh(cubeGeometry, materials);
+    this._viewCubeScene.add(this._viewCube);
+    
+    // Add edges for better visibility
+    const edges = new THREE.EdgesGeometry(cubeGeometry);
+    const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x666666 });
+    const edgesMesh = new THREE.LineSegments(edges, edgesMaterial);
+    this._viewCube.add(edgesMesh);
+    
+    // Raycaster for ViewCube interaction
+    this._viewCubeRaycaster = new THREE.Raycaster();
+    
+    // Add click listener for ViewCube
+    this.renderer.domElement.addEventListener('click', (e) => this._onViewCubeClick(e));
+    
+    // Add mousemove listener for hover effects
+    this.renderer.domElement.addEventListener('mousemove', (e) => this._onViewCubeHover(e));
+    
+    // Store face directions for camera positioning
+    // Must match materials array order: RIGHT, LEFT, TOP, BOTTOM, FRONT, BACK
+    this._viewCubeFaces = {
+      0: { name: 'RIGHT', dir: new THREE.Vector3(1, 0, 0) },
+      1: { name: 'LEFT', dir: new THREE.Vector3(-1, 0, 0) },
+      2: { name: 'TOP', dir: new THREE.Vector3(0, 1, 0) },
+      3: { name: 'BOTTOM', dir: new THREE.Vector3(0, -1, 0) },
+      4: { name: 'FRONT', dir: new THREE.Vector3(0, 0, 1) },
+      5: { name: 'BACK', dir: new THREE.Vector3(0, 0, -1) }
+    };
+  }
+  
+  /**
+   * Handle click on ViewCube to rotate camera
+   */
+  _onViewCubeClick(event) {
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const w = rect.width;
+    const h = rect.height;
+    
+    // ViewCube is in top-right corner
+    const cubeSize = 150;
+    const margin = 10;
+    const cubeLeft = w - cubeSize - margin;
+    const cubeTop = margin;
+    
+    // Check if click is within ViewCube area
+    if (x < cubeLeft || x > cubeLeft + cubeSize || y < cubeTop || y > cubeTop + cubeSize) {
+      return; // Click outside ViewCube
+    }
+    
+    // Convert to normalized coordinates within ViewCube
+    const cubeX = ((x - cubeLeft) / cubeSize) * 2 - 1;
+    const cubeY = -((y - cubeTop) / cubeSize) * 2 + 1;
+    
+    // Raycast against ViewCube mesh only (ignore edge line child)
+    this._viewCubeRaycaster.setFromCamera(new THREE.Vector2(cubeX, cubeY), this._viewCubeCamera);
+    const intersects = this._viewCubeRaycaster.intersectObject(this._viewCube, false);
+    const hit = intersects.find(i => i.object === this._viewCube && i.face);
+    
+    if (hit && hit.face) {
+      // Get material index directly from the face - this is reliable
+      const materialIndex = hit.face.materialIndex;
+      const face = this._viewCubeFaces[materialIndex];
+      
+      console.log('ViewCube clicked, materialIndex:', materialIndex, 'face:', face?.name);
+      
+      if (face) {
+        this._setCameraView(face.dir, face.name);
+      }
+    }
+  }
+  
+  /**
+   * Handle hover on ViewCube to highlight faces
+   */
+  _onViewCubeHover(event) {
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const w = rect.width;
+    const h = rect.height;
+    
+    // ViewCube is in top-right corner
+    const cubeSize = 150;
+    const margin = 10;
+    const cubeLeft = w - cubeSize - margin;
+    const cubeTop = margin;
+    
+    // Check if hover is within ViewCube area
+    if (x < cubeLeft || x > cubeLeft + cubeSize || y < cubeTop || y > cubeTop + cubeSize) {
+      // Outside ViewCube - reset all materials
+      if (this._viewCubeHoveredFace !== null) {
+        this._viewCubeMaterials.forEach(mat => {
+          mat.color.setHex(0xffffff);
+          mat.needsUpdate = true;
+        });
+        this._viewCubeHoveredFace = null;
+        this.renderer.domElement.style.cursor = 'default';
+      }
+      return;
+    }
+    
+    // Convert to normalized coordinates within ViewCube
+    const cubeX = ((x - cubeLeft) / cubeSize) * 2 - 1;
+    const cubeY = -((y - cubeTop) / cubeSize) * 2 + 1;
+    
+    // Raycast against ViewCube mesh only
+    this._viewCubeRaycaster.setFromCamera(new THREE.Vector2(cubeX, cubeY), this._viewCubeCamera);
+    const intersects = this._viewCubeRaycaster.intersectObject(this._viewCube, false);
+    const hit = intersects.find(i => i.object === this._viewCube && i.face);
+    
+    if (hit && hit.face) {
+      // Get material index directly from the face - this is reliable
+      const materialIndex = hit.face.materialIndex;
+      
+      console.log('ViewCube hover, materialIndex:', materialIndex);
+      
+      // Highlight the hovered face
+      if (this._viewCubeHoveredFace !== materialIndex) {
+        // Reset all materials
+        this._viewCubeMaterials.forEach(mat => {
+          mat.color.setHex(0xffffff);
+          mat.needsUpdate = true;
+        });
+        
+        // Highlight the hovered face with slight yellow tint
+        if (materialIndex >= 0 && materialIndex < this._viewCubeMaterials.length) {
+          this._viewCubeMaterials[materialIndex].color.setHex(0xffffcc);
+          this._viewCubeMaterials[materialIndex].needsUpdate = true;
+          this._viewCubeHoveredFace = materialIndex;
+        }
+        this.renderer.domElement.style.cursor = 'pointer';
+      }
+    } else {
+      // Not hovering over a face
+      if (this._viewCubeHoveredFace !== null) {
+        this._viewCubeMaterials.forEach(mat => {
+          mat.color.setHex(0xffffff);
+          mat.needsUpdate = true;
+        });
+        this._viewCubeHoveredFace = null;
+        this.renderer.domElement.style.cursor = 'default';
+      }
+    }
+  }
+  
+  /**
+   * Animate camera to a preset view direction
+   */
+  _setCameraView(direction, viewName) {
+    const target = this.controls.target.clone();
+    const distance = this.camera.position.distanceTo(target);
+    
+    // Calculate new camera position
+    const newPosition = target.clone().add(direction.clone().multiplyScalar(distance));
+    
+    // Keep a stable global up vector so OrbitControls behavior stays consistent
+    const upVector = new THREE.Vector3(0, 1, 0);
+    
+    // Animate camera position
+    const startPos = this.camera.position.clone();
+    const startTime = Date.now();
+    const duration = 300;
+    
+    const animateCamera = () => {
+      const elapsed = Date.now() - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      
+      this.camera.position.lerpVectors(startPos, newPosition, eased);
+      this.camera.up.copy(upVector);
+      this.camera.lookAt(target);
+      this.controls.update();
+      
+      if (t < 1) {
+        requestAnimationFrame(animateCamera);
+      }
+    };
+    
+    animateCamera();
+  }
+  
+  /**
+   * Render the ViewCube
+   */
+  _renderViewCube() {
+    if (!this._viewCube) return;
+    
+    // Sync ViewCube rotation with main camera
+    const quaternion = this.camera.quaternion.clone().invert();
+    this._viewCube.quaternion.copy(quaternion);
+    
+    // Render ViewCube in top-right corner
+    const w = this.container.clientWidth;
+    const h = this.container.clientHeight;
+    const cubeSize = 150;
+    const margin = 10;
+    
+    this.renderer.setViewport(w - cubeSize - margin, h - cubeSize - margin, cubeSize, cubeSize);
+    this.renderer.setScissor(w - cubeSize - margin, h - cubeSize - margin, cubeSize, cubeSize);
+    this.renderer.setScissorTest(true);
+    
+    // Render without clearing so it overlays on main scene
+    this.renderer.autoClear = false;
+    this.renderer.clearDepth();
+    this.renderer.render(this._viewCubeScene, this._viewCubeCamera);
+    this.renderer.autoClear = true;
+    
+    // Reset viewport
+    this.renderer.setViewport(0, 0, w, h);
+    this.renderer.setScissorTest(false);
   }
 
   importGLB(file) {
