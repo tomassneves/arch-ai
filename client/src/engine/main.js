@@ -46,7 +46,12 @@ document.getElementById('btn-import')?.addEventListener('click', () => {
 document.getElementById('import-file')?.addEventListener('change', (e) => {
   const file = e.target.files?.[0]
   if (file) {
-    engine.importGLB(file)
+    const ext = file.name.split('.').pop()?.toLowerCase()
+    if (ext === 'archai') {
+      engine.loadProject(file)
+    } else {
+      engine.importGLB(file)
+    }
     e.target.value = '' // reset for next import
   }
 })

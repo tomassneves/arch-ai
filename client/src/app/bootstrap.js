@@ -150,7 +150,7 @@ export function bootstrap(engine) {
   // File menu actions
   menuSave?.addEventListener('click', (e) => {
     e.stopPropagation()
-    engine.exportGLB()
+    engine.saveProject()
     fileDropdown.style.display = 'none'
     addDropdown.style.display = 'none'
   })
@@ -173,15 +173,18 @@ export function bootstrap(engine) {
   importFile?.addEventListener('change', (e) => {
     const file = e.target.files?.[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (ev) => {
-        const arrayBuffer = ev.target?.result
-        if (arrayBuffer instanceof ArrayBuffer) {
-          engine.importGLB(arrayBuffer)
-        }
+      // Check file extension
+      const ext = file.name.split('.').pop()?.toLowerCase()
+      
+      if (ext === 'archai') {
+        // Load Archai project file
+        engine.loadProject(file)
+      } else {
+        // Load GLB/GLTF file
+        engine.importGLB(file)
       }
-      reader.readAsArrayBuffer(file)
+      // Reset input for next import
+      e.target.value = ''
     }
-    e.target.value = '' // Reset input
   })
 }

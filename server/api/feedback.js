@@ -5,12 +5,12 @@ const router = Router();
 
 router.post('/', async (req, res) => {
   try {
-    const { objectName, currentComposition, feedback, rating } = req.body;
+    const { objectName, currentComposition, feedback, rating, storageOnly } = req.body;
 
-    if (!objectName || !currentComposition) {
+    if (!objectName) {
       return res.status(400).json({ 
         ok: false, 
-        error: 'Missing required fields: objectName, currentComposition' 
+        error: 'Missing required field: objectName' 
       });
     }
     
@@ -21,7 +21,22 @@ router.post('/', async (req, res) => {
         error: 'Either feedback text or rating must be provided'
       });
     }
+    
+    // If storageOnly is true, just store the feedback without refining
+    if (storageOnly) {
+      console.log(`📝 Storing feedback for ${objectName}: "${feedback}"`);
+      
+      // TODO: Store feedback in database for future analysis/learning
+      // For now, just log it
+      
+      return res.json({ 
+        ok: true, 
+        message: 'Feedback stored successfully',
+        stored: true
+      });
+    }
 
+    // Otherwise, refine the model based on the feedback
     const result = await refineModel(objectName, currentComposition, feedback, rating);
 
     res.json({ 

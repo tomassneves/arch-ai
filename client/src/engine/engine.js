@@ -67,6 +67,9 @@ export class Engine {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
 
+    // ViewCube setup
+    this._setupViewCube();
+
     this.scene.add(new THREE.AmbientLight(0xffffff, 0.6));
     const dir = new THREE.DirectionalLight(0xffffff, 1);
     dir.position.set(5, 10, 7);
@@ -79,6 +82,7 @@ export class Engine {
     this._proxyStates = new Map(); // initial states for multi-transform
     this.toolMode = "translate";
     this._billboards = [];
+    this._isShiftDown = false;
 
     this.raycaster = new THREE.Raycaster();
     this.pointer = new THREE.Vector2();
@@ -87,6 +91,7 @@ export class Engine {
     this.transform.setMode("translate");
     this.scene.add(this.transform.getHelper());
     this._recolorGizmo();
+    this.transform.addEventListener("change", () => this._enforceUniformScale());
     this.transform.addEventListener("dragging-changed", (e) => {
       this.controls.enabled = !e.value;
       
@@ -216,6 +221,17 @@ export class Engine {
     });
     
     this.renderer.domElement.addEventListener("dblclick", (e) => this._doubleClick(e));
+
+    // Track Shift state globally for proportional scaling
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Shift") this._isShiftDown = true;
+    });
+    window.addEventListener("keyup", (e) => {
+      if (e.key === "Shift") this._isShiftDown = false;
+    });
+    window.addEventListener("blur", () => {
+      this._isShiftDown = false;
+    });
     
     // Attach keydown directly to canvas for better event capture
     this.renderer.domElement.addEventListener("keydown", (e) => {
@@ -897,6 +913,40 @@ export class Engine {
     this.emit("toolchange", { mode });
   }
 
+  _enforceUniformScale() {
+    if (this.toolMode !== "scale" || !this.transform.dragging || !this._isShiftDown) return;
+
+    const pickUniformFactor = (currentScale, startScale) => {
+      const sx = startScale.x !== 0 ? currentScale.x / startScale.x : 1;
+      const sy = startScale.y !== 0 ? currentScale.y / startScale.y : 1;
+      const sz = startScale.z !== 0 ? currentScale.z / startScale.z : 1;
+      const deltas = [Math.abs(sx - 1), Math.abs(sy - 1), Math.abs(sz - 1)];
+      const factors = [sx, sy, sz];
+      const maxIndex = deltas[0] >= deltas[1] && deltas[0] >= deltas[2] ? 0 : (deltas[1] >= deltas[2] ? 1 : 2);
+      const factor = factors[maxIndex];
+      return Number.isFinite(factor) && factor > 0 ? factor : 1;
+    };
+
+    if (this.selectedSet.size > 1 && this._transformProxy && this._proxyStart) {
+      const factor = pickUniformFactor(this._transformProxy.scale, this._proxyStart.scale);
+      this._transformProxy.scale.set(
+        this._proxyStart.scale.x * factor,
+        this._proxyStart.scale.y * factor,
+        this._proxyStart.scale.z * factor
+      );
+      return;
+    }
+
+    if (this.selected && this._t0) {
+      const factor = pickUniformFactor(this.selected.scale, this._t0.scale);
+      this.selected.scale.set(
+        this._t0.scale.x * factor,
+        this._t0.scale.y * factor,
+        this._t0.scale.z * factor
+      );
+    }
+  }
+
   // Enter group editing mode (SketchUp-style)
   enterGroupEdit(groupObject) {
     if (!groupObject.userData?.composition || groupObject.userData.composition.length === 0) {
@@ -1067,14 +1117,29 @@ export class Engine {
       return;
     }
     
-    // Clone the object from clipboard
-    const newObject = this._clipboard.object.clone();
+    // Clone the object from clipboard (deep clone)
+    const newObject = this._clipboard.object.clone(true);
+    
+    // Copy userData and ensure selectable flag is set
     newObject.userData = JSON.parse(JSON.stringify(this._clipboard.userData));
+    newObject.userData.selectable = true;
+    newObject.userData.isDefault = false;
     
     // Offset position slightly so it's visible
     newObject.position.copy(this._clipboard.position).add(new THREE.Vector3(0.5, 0, 0.5));
     newObject.rotation.copy(this._clipboard.rotation);
     newObject.scale.copy(this._clipboard.scale);
+    
+    // Clone materials to avoid shared references
+    newObject.traverse((child) => {
+      if (child.isMesh && child.material) {
+        child.material = child.material.clone();
+      }
+      if (child.userData) {
+        child.userData.selectable = true;
+        child.userData.isDefault = false;
+      }
+    });
     
     // Add to scene
     this.scene.add(newObject);
@@ -1095,12 +1160,27 @@ export class Engine {
       return;
     }
     
-    // Clone the selected object
-    const newObject = this.selected.clone();
+    // Clone the selected object (deep clone)
+    const newObject = this.selected.clone(true);
+    
+    // Copy userData and ensure selectable flag is set
     newObject.userData = JSON.parse(JSON.stringify(this.selected.userData));
+    newObject.userData.selectable = true;
+    newObject.userData.isDefault = false;
     
     // Offset position slightly so it's visible
     newObject.position.copy(this.selected.position).add(new THREE.Vector3(0.5, 0, 0.5));
+    
+    // Clone materials to avoid shared references
+    newObject.traverse((child) => {
+      if (child.isMesh && child.material) {
+        child.material = child.material.clone();
+      }
+      if (child.userData) {
+        child.userData.selectable = true;
+        child.userData.isDefault = false;
+      }
+    });
     
     // Add to scene
     this.scene.add(newObject);
@@ -1113,6 +1193,61 @@ export class Engine {
     this.setSelected(newObject);
     
     console.log('✅ Object duplicated');
+  }
+  
+  /**
+   * Add feedback for an object without modifying it
+   */
+  addObjectFeedback(object) {
+    if (!object) return;
+    
+    // Focus the feedback input field on the 3D object's UI
+    const feedbackInput = document.querySelector('.feedback-3d-input');
+    if (feedbackInput) {
+      // Change placeholder to "Add feedback"
+      const originalPlaceholder = feedbackInput.placeholder;
+      feedbackInput.placeholder = 'Add feedback';
+      feedbackInput.focus();
+      feedbackInput.select();
+      
+      // Restore original placeholder when input loses focus
+      const restorePlaceholder = () => {
+        feedbackInput.placeholder = originalPlaceholder;
+        feedbackInput.removeEventListener('blur', restorePlaceholder);
+      };
+      feedbackInput.addEventListener('blur', restorePlaceholder);
+    }
+  }
+  
+  /**
+   * Send feedback to server for storage
+   */
+  async _sendFeedbackToServer(object, feedback) {
+    try {
+      const objName = object.userData.compositeName || object.userData.type || object.name || 'object';
+      const composition = object.userData.composition || [];
+      
+      const response = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          objectName: objName,
+          currentComposition: composition,
+          feedback: feedback,
+          rating: null, // No rating, just feedback
+          storageOnly: true // Don't modify the object, just store feedback
+        })
+      });
+      
+      const data = await response.json();
+      if (data.ok) {
+        console.log('📡 Feedback sent to server successfully');
+      } else {
+        console.warn('⚠️ Server received feedback but returned error:', data.error);
+      }
+    } catch (err) {
+      console.warn('⚠️ Could not send feedback to server:', err.message);
+    }
   }
 
   _keys(e) {
@@ -1153,7 +1288,6 @@ export class Engine {
         return this.exitGroupEdit();
       }
     }
-    if (k === "g") return this.exportGLB();
 
     console.log(`Key pressed: "${e.key}", isDeleteKey: ${isDeleteKey}, this.selected:`, this.selected);
     
@@ -1795,7 +1929,7 @@ export class Engine {
             </div>
             <input type="text" 
                    class="feedback-3d-input" 
-                   placeholder="Edit/Improve ${objName}..." 
+                   placeholder="Improve object..." 
                    />
             <div class="feedback-3d-toolbar">
               <button class="feedback-btn feedback-btn-undo" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
@@ -2045,6 +2179,16 @@ export class Engine {
               this.exitGroupEdit();
               dropdownMenu.style.display = 'none';
             }
+          }
+        });
+        
+        // Add Feedback option (at bottom)
+        menuItems.push({
+          label: 'Add Feedback',
+          enabled: true,
+          action: () => {
+            this.addObjectFeedback(object);
+            dropdownMenu.style.display = 'none';
           }
         });
         
@@ -2481,11 +2625,350 @@ export class Engine {
       this.scene,
       (res) => {
         const url = URL.createObjectURL(new Blob([res], { type: "model/gltf-binary" }));
-        Object.assign(document.createElement("a"), { href: url, download: "ai-arch.glb" }).click();
+        Object.assign(document.createElement("a"), { href: url, download: "archai-export.glb" }).click();
         URL.revokeObjectURL(url);
       },
       { binary: true }
     );
+  }
+
+  /**
+   * Save project as .archai file (JSON format)
+   * Preserves all objects, transforms, compositions, and metadata
+   */
+  saveProject() {
+    const projectData = {
+      version: "1.0",
+      name: "Untitled",
+      timestamp: new Date().toISOString(),
+      camera: {
+        position: this.camera.position.toArray(),
+        rotation: [this.camera.rotation.x, this.camera.rotation.y, this.camera.rotation.z],
+        target: this.controls.target.toArray()
+      },
+      objects: []
+    };
+
+    // Serialize each selectable object
+    this.selectables.forEach(obj => {
+      // Skip default objects and non-selectable
+      if (!obj.userData?.selectable) return;
+      if (obj.userData?.isDefault) return;
+      if (obj.userData?.isHuman) return; // Don't save reference silhouette
+      
+      const objData = this._serializeObject(obj);
+      if (objData) {
+        projectData.objects.push(objData);
+      }
+    });
+
+    // Download as .archai file
+    const json = JSON.stringify(projectData, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'project.archai';
+    a.click();
+    URL.revokeObjectURL(url);
+    console.log('💾 Project saved as .archai file');
+  }
+
+  /**
+   * Serialize a single object to JSON
+   */
+  _serializeObject(obj) {
+    const data = {
+      type: obj.userData?.type || obj.type || 'Unknown',
+      name: obj.name || '',
+      position: obj.position.toArray(),
+      rotation: [obj.rotation.x, obj.rotation.y, obj.rotation.z],
+      scale: obj.scale.toArray(),
+      userData: { ...obj.userData }
+    };
+
+    // Remove non-serializable data
+    delete data.userData.selectable;
+    delete data.userData.history;
+    delete data.userData.redoStack;
+
+    // Handle composition (for AI-generated objects)
+    if (obj.userData?.composition) {
+      data.composition = obj.userData.composition;
+      data.compositeName = obj.userData.compositeName;
+    }
+
+    // Handle groups with children
+    if (obj.children && obj.children.length > 0) {
+      data.children = [];
+      obj.children.forEach(child => {
+        if (child.isMesh || child.isGroup) {
+          const childData = this._serializeObject(child);
+          if (childData) data.children.push(childData);
+        }
+      });
+    }
+
+    // Store geometry type for basic shapes
+    if (obj.geometry) {
+      data.geometryType = obj.geometry.type;
+      if (obj.geometry.parameters) {
+        data.geometryParams = { ...obj.geometry.parameters };
+      }
+    }
+
+    // Store material color
+    if (obj.material) {
+      data.materialColor = obj.material.color ? '#' + obj.material.color.getHexString() : null;
+    }
+
+    return data;
+  }
+
+  /**
+   * Load project from .archai file
+   */
+  loadProject(file) {
+    console.log('📂 Opening file:', file.name, file.type, file.size, 'bytes');
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const projectData = JSON.parse(e.target.result);
+        console.log('📂 Loading project:', projectData.name, 'version:', projectData.version);
+        console.log('📦 Objects to load:', projectData.objects?.length || 0);
+
+        // Clear current scene (except defaults)
+        this._clearNonDefaultObjects();
+
+        // Restore camera
+        if (projectData.camera) {
+          this.camera.position.fromArray(projectData.camera.position);
+          this.controls.target.fromArray(projectData.camera.target);
+          this.controls.update();
+          console.log('📷 Camera restored');
+        }
+
+        // Recreate objects
+        if (projectData.objects && projectData.objects.length > 0) {
+          projectData.objects.forEach((objData, idx) => {
+            console.log(`📦 Loading object ${idx + 1}/${projectData.objects.length}:`, objData.type || objData.name);
+            const obj = this._deserializeObject(objData);
+            if (obj) {
+              console.log('✅ Object created:', obj.name || obj.type);
+            } else {
+              console.warn('⚠️ Failed to create object:', objData);
+            }
+          });
+        } else {
+          console.log('ℹ️ No objects to load');
+        }
+
+        console.log('✅ Project loaded successfully');
+      } catch (err) {
+        console.error('❌ Failed to load project:', err);
+        alert('Failed to load project file: ' + err.message);
+      }
+    };
+    reader.onerror = (err) => {
+      console.error('❌ File read error:', err);
+      alert('Failed to read file: ' + err.message);
+    };
+    reader.readAsText(file);
+  }
+
+  /**
+   * Clear all non-default objects from scene
+   */
+  _clearNonDefaultObjects() {
+    const toRemove = [];
+    this.selectables.forEach(obj => {
+      if (!obj.userData?.isDefault && !obj.userData?.isHuman) {
+        toRemove.push(obj);
+      }
+    });
+    console.log('🗑️ Clearing', toRemove.length, 'non-default objects');
+    toRemove.forEach(obj => {
+      this.scene.remove(obj);
+      const idx = this.selectables.indexOf(obj);
+      if (idx >= 0) this.selectables.splice(idx, 1);
+    });
+    this.selectedSet.clear();
+    this.setSelected(null);
+    console.log('✅ Scene cleared, remaining selectables:', this.selectables.length);
+  }
+
+  /**
+   * Deserialize and recreate an object from saved data
+   */
+  _deserializeObject(data, parent = null) {
+    console.log('🔧 Deserializing:', data.type, data.name, 'composition:', !!data.composition, 'children:', !!data.children, 'geometry:', data.geometryType);
+    let obj = null;
+
+    // Handle composition-based objects (AI-generated)
+    if (data.composition && data.composition.length > 0) {
+      console.log('🏗️ Creating composite with', data.composition.length, 'parts');
+      // Use the composition to recreate
+      const group = new THREE.Group();
+      group.name = data.name || data.compositeName || 'Composite';
+      group.userData.compositeName = data.compositeName;
+      group.userData.composition = data.composition;
+      group.userData.type = 'Composite';
+      group.userData.selectable = true;
+      
+      // Copy other userData
+      if (data.userData) {
+        Object.assign(group.userData, data.userData);
+      }
+      
+      // Recreate children from composition
+      data.composition.forEach((partSpec, idx) => {
+        const partMesh = this._createPartFromSpec(partSpec);
+        if (partMesh) {
+          group.add(partMesh);
+          console.log(`  ✓ Part ${idx + 1}/${data.composition.length} added`);
+        }
+      });
+      
+      obj = group;
+    } else if (data.children && data.children.length > 0) {
+      console.log('📦 Creating group with', data.children.length, 'children');
+      // Handle regular groups with children
+      const group = new THREE.Group();
+      group.name = data.name || 'Group';
+      group.userData.type = data.type || 'Group';
+      group.userData.selectable = true;
+      
+      // Copy other userData
+      if (data.userData) {
+        Object.assign(group.userData, data.userData);
+      }
+      
+      // Recreate children recursively
+      data.children.forEach((childData, idx) => {
+        const child = this._deserializeObject(childData, group);
+        if (child && !child.parent) {
+          group.add(child);
+          console.log(`  ✓ Child ${idx + 1}/${data.children.length} added`);
+        }
+      });
+      
+      obj = group;
+    } else if (data.geometryType) {
+      console.log('📐 Creating from geometry type:', data.geometryType);
+      // Recreate basic shape from geometry type
+      obj = this._createFromGeometryType(data);
+    } else if (data.type && this['add' + data.type]) {
+      console.log('🔨 Using add method: add' + data.type);
+      // Use existing add method if available
+      obj = this['add' + data.type](data.userData?.params || {});
+      // Remove from history since we're loading, not creating new
+      if (this.history.length > 0 && this.history[this.history.length - 1].object === obj) {
+        this.history.pop();
+      }
+    } else {
+      console.warn('⚠️ Could not determine how to create object:', data.type);
+    }
+
+    if (obj) {
+      // Apply transform
+      obj.position.fromArray(data.position);
+      obj.rotation.set(data.rotation[0], data.rotation[1], data.rotation[2]);
+      obj.scale.fromArray(data.scale);
+      obj.name = data.name || '';
+      
+      // Restore userData
+      if (data.userData) {
+        Object.assign(obj.userData, data.userData);
+        obj.userData.selectable = true; // Ensure it's selectable
+      }
+
+      // If not already added to scene
+      if (!obj.parent) {
+        if (parent) {
+          parent.add(obj);
+        } else {
+          this.scene.add(obj);
+          this._addSel(obj);
+        }
+      }
+      
+      console.log('✅ Object deserialized and added to scene');
+    }
+
+    return obj;
+  }
+
+  /**
+   * Create a mesh from saved geometry type
+   */
+  _createFromGeometryType(data) {
+    let geometry;
+    const params = data.geometryParams || {};
+    const color = data.materialColor ? parseInt(data.materialColor.replace('#', ''), 16) : 0x9aa3b2;
+
+    switch (data.geometryType) {
+      case 'BoxGeometry':
+        geometry = new THREE.BoxGeometry(params.width || 2, params.height || 2, params.depth || 2);
+        break;
+      case 'SphereGeometry':
+        geometry = new THREE.SphereGeometry(params.radius || 1, params.widthSegments || 32, params.heightSegments || 32);
+        break;
+      case 'CylinderGeometry':
+        geometry = new THREE.CylinderGeometry(params.radiusTop || 1, params.radiusBottom || 1, params.height || 2, params.radialSegments || 32);
+        break;
+      case 'ConeGeometry':
+        geometry = new THREE.ConeGeometry(params.radius || 1, params.height || 2, params.radialSegments || 32);
+        break;
+      case 'TorusGeometry':
+        geometry = new THREE.TorusGeometry(params.radius || 1, params.tube || 0.4, params.radialSegments || 16, params.tubularSegments || 48);
+        break;
+      default:
+        // Fallback to box
+        geometry = new THREE.BoxGeometry(2, 2, 2);
+    }
+
+    const material = new THREE.MeshStandardMaterial({ color });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.userData.selectable = true;
+    mesh.userData.type = data.type || 'Mesh';
+
+    return mesh;
+  }
+
+  /**
+   * Create a part mesh from a composition spec
+   */
+  _createPartFromSpec(spec) {
+    const { type, color, position, rotation, scale, params } = spec;
+    let geometry;
+    const c = typeof color === 'string' ? parseInt(color.replace('#', ''), 16) : (color || 0x9aa3b2);
+
+    switch (type?.toLowerCase()) {
+      case 'cube':
+      case 'box':
+        geometry = new THREE.BoxGeometry(params?.width || 2, params?.height || 2, params?.depth || 2);
+        break;
+      case 'sphere':
+        geometry = new THREE.SphereGeometry(params?.radius || 1, 32, 32);
+        break;
+      case 'cylinder':
+        geometry = new THREE.CylinderGeometry(params?.radiusTop || params?.radius || 1, params?.radiusBottom || params?.radius || 1, params?.height || 2, 32);
+        break;
+      case 'cone':
+        geometry = new THREE.ConeGeometry(params?.radius || 1, params?.height || 2, 32);
+        break;
+      default:
+        geometry = new THREE.BoxGeometry(1, 1, 1);
+    }
+
+    const material = new THREE.MeshStandardMaterial({ color: c });
+    const mesh = new THREE.Mesh(geometry, material);
+
+    if (position) mesh.position.set(position.x || 0, position.y || 0, position.z || 0);
+    if (rotation) mesh.rotation.set(rotation.x || 0, rotation.y || 0, rotation.z || 0);
+    if (scale) mesh.scale.set(scale.x || 1, scale.y || 1, scale.z || 1);
+
+    return mesh;
   }
 
   importGLB(file) {
